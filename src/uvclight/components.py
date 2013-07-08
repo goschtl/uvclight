@@ -7,6 +7,10 @@ from cromlech.webob.response import Response
 from dolmen.layout import Layout
 
 
+class View(View):
+    responseFactory = Response
+
+
 class Layout(Layout):
     responseFactory = Response
 
