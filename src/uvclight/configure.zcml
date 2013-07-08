@@ -1,0 +1,35 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:grok="http://namespaces.zope.org/grok">
+
+  <include package="zope.security" file="meta.zcml" />
+  <include package="zope.component" file="meta.zcml" />
+  <include package="grokcore.component" file="meta.zcml" />
+  <include package="dolmen.layout" file="meta.zcml" />
+
+  <include package="dolmen.request" />
+  <include package="dolmen.content" />
+  <include package="dolmen.view" file="meta.zcml" />
+  <include package="dolmen.view" file="security.zcml" />
+
+  <include package="dolmen.viewlet" file="meta.zcml" />
+  <include package="dolmen.viewlet" file="security.zcml" />
+
+  <include package="zope.security" file="meta.zcml" />
+  <include package="zope.security" />
+
+  <include package="zope.i18n" />
+  <include package="cromlech.webob" />
+  <include package="cromlech.dawnlight" />
+  <include package="cromlech.dawnlight" file="consumers.zcml" />
+
+<!--
+  <include package="dolmen.app.container" />
+  <include package="dolmen.breadcrumbs" />
+
+  <grok:grok package="." />
+  <grok:grok package="dolmen.location" />
+  <include package="uvc.layout" />
+-->
+</configure>
+
