@@ -6,13 +6,22 @@ from cromlech.browser.testing import TestRequest
 from grokcore.component import Context
 from zope.component import getMultiAdapter
 
-class TestView:
+class TestViewComponents:
+    request = TestRequest()
+    context = Context()
 
     def test_base_view(self, config):
-        request = TestRequest()
-        context = Context()
-        view = getMultiAdapter((context, request), name='myview')
+        view = getMultiAdapter((self.context, self.request), name='index')
+        assert view is not None
         view.update()
         html = view.render()
-        assert view is not None
         assert html == "Hello World Christian"
+
+
+    def test_base_page(self, config):
+        page = getMultiAdapter((self.context, self.request), name='page')
+        assert page is not None
+        page.update()
+        html = page()
+        assert html == "<body>Hello World Christian</body>"
+

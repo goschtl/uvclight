@@ -2,6 +2,6 @@
 # Copyright (c) 2007-2011 NovaReto GmbH
 # cklinger@novareto.de
 
-
-from dolmen.view import View
-from dolmen.view import context
+from uvclight.directives import context, name, viewletmanager
+from uvclight.components import View, Layout, Page
+from uvclight.utils import get_template
