@@ -2,9 +2,10 @@
 # Copyright (c) 2007-2011 NovaReto GmbH
 # cklinger@novareto.de
 
-from cromlech.browser.testing import TestRequest
+from cromlech.browser.testing import TestRequest, TestView
 from grokcore.component import Context
 from zope.component import getMultiAdapter
+from dolmen.viewlet.interfaces import IViewSlot
 
 
 class TestViewComponents:
@@ -25,3 +26,20 @@ class TestViewComponents:
         page.update()
         html = str(page().body)
         assert html == "<body>Hello World Christian</body>\n"
+
+
+class TestViewletComponents:
+    request = TestRequest()
+    context = Context()
+    view = TestView(context, request)
+
+    def test_get_ViewletManager(self, config):
+        vlm = getMultiAdapter((self.context, self.request, self.view),
+                              IViewSlot, name=u"header")
+        assert vlm is not None
+        vlm.update()
+        assert len(vlm.viewlets) == 1
+        viewlet = vlm.viewlets[0]
+        assert viewlet.render() == "Hello World"
+
+
