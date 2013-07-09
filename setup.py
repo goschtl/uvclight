@@ -42,5 +42,7 @@ setup(name='uvclight',
       ],
       entry_points="""
       # -*- Entry points: -*-
+      [chameleon.tales]
+      provider = uvclight.tales:SlotExpr
       """,
       )
