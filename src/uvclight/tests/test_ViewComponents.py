@@ -43,3 +43,16 @@ class TestViewletComponents:
         assert viewlet.render() == "Hello World"
 
 
+class TestFormComponents:
+    request = TestRequest()
+    context = Context()
+
+    def test_base_form(self, config):
+        form = getMultiAdapter((self.context, self.request), name=u"myform")
+        form.update()
+        fields = [x.identifier for x in form.fields]
+        assert 'gender' in fields
+        assert 'name' in fields
+        actions = [x.identifier for x in form.actions]
+        assert 'save' in actions
+        assert form().status == '200 OK'

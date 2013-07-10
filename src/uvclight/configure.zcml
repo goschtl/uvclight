@@ -23,6 +23,8 @@
   <include package="cromlech.dawnlight" />
   <include package="cromlech.dawnlight" file="consumers.zcml" />
 
+  <include package="dolmen.forms.ztk" />
+
 <!--
   <include package="dolmen.app.container" />
   <include package="dolmen.breadcrumbs" />
