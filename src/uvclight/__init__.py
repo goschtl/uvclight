@@ -3,7 +3,7 @@
 # cklinger@novareto.de
 
 from uvclight.directives import context, name, viewletmanager
-from uvclight.components import (View, Layout, Page, ViewletManager, Viewlet,
-                                 Form, Fields, )
+from uvclight.components import View, Layout, Page, Form, Fields
+from uvclight.components import ViewletManager, Viewlet
 from uvclight.utils import get_template
 from dolmen.forms.base import action

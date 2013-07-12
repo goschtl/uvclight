@@ -7,6 +7,7 @@ from cromlech.webob.response import Response
 from dolmen.layout import Layout
 from dolmen.viewlet import ViewletManager, Viewlet
 from dolmen.forms.base import Form, Fields, action
+from dolmen.forms.ztk.validation import InvariantsValidation
 
 
 class View(View):
@@ -25,3 +26,4 @@ class Page(View):
 class Form(Form):
     responseFactory = Response
     make_response = make_layout_response
+    dataValidators = [InvariantsValidation]

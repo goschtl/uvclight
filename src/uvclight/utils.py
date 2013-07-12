@@ -2,15 +2,14 @@
 # Copyright (c) 2007-2011 NovaReto GmbH
 # cklinger@novareto.de
 
-import os
-
+from os import path
 from dolmen.template import TALTemplate
 
 
-TEMPLATES_DIR = os.path.join(os.path.dirname(__file__), 'templates')
+TEMPLATES_DIR = path.join(path.dirname(__file__), 'templates')
 
 
 def get_template(filename, dir=None):
     if dir:
-        TEMPLATES_DIR = os.path.join(os.path.dirname(dir), 'templates')
-    return TALTemplate(os.path.join(TEMPLATES_DIR, filename))
+        return TALTemplate(path.join(path.dirname(dir), 'templates', filename))
+    return TALTemplate(path.join(TEMPLATES_DIR, filename))

@@ -12,6 +12,9 @@
   <include package="dolmen.view" file="meta.zcml" />
   <include package="dolmen.view" file="security.zcml" />
 
+  <include package="dolmen.forms.base" />
+  <include package="dolmen.forms.ztk"  />
+
   <include package="dolmen.viewlet" file="meta.zcml" />
   <include package="dolmen.viewlet" file="security.zcml" />
 
