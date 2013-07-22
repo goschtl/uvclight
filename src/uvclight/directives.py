@@ -3,5 +3,5 @@
 # cklinger@novareto.de
 
 
-from grokcore.component import context, name
+from grokcore.component import context, name, order
 from dolmen.viewlet import slot as viewletmanager
