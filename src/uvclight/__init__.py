@@ -16,5 +16,6 @@ from uvclight.directives import (
     layer,
     name,
     require,
+    title,
     viewletmanager,
     )
