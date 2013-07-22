@@ -27,6 +27,9 @@
   <include package="cromlech.dawnlight" file="consumers.zcml" />
 
   <include package="dolmen.forms.ztk" />
+  <grok:grok package="dolmen.location" />
+  <grok:grok package="dolmen.template" />
+
 
 <!--
   <include package="dolmen.app.container" />
