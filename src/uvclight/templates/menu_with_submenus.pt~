@@ -1,0 +1,22 @@
+<dl tal:condition="manager.viewlets or manager.submenus"
+    tal:attributes="id manager.id;
+		    class manager.menu_class;">
+  <dt tal:content="manager.title"
+      tal:condition="manager.title" />
+  <dd tal>
+    <ul>
+      <li tal:attributes="class manager.entry_class"
+	  tal:repeat="action manager.viewlets">
+	<tal:entry content="structure action.render()" />
+      </li>
+    </ul>
+  </dd>
+  <dd>
+    <ul>
+      <li tal:attributes="class manager.entry_class"
+	  tal:repeat="action manager.viewlets">
+	<tal:entry content="structure action.render()" />
+      </li>
+    </ul>
+  </dd>
+</dl>

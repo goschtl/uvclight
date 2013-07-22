@@ -2,11 +2,21 @@
 # Copyright (c) 2007-2011 NovaReto GmbH
 # cklinger@novareto.de
 
-from uvclight.components import View, Layout, Page, Form, Fields, Menu, MenuItem
+
 from uvclight.components import ViewletManager, Viewlet
 from uvclight.utils import get_template
 from dolmen.forms.base import action
-from dolmen.menu import Menu
+
+from uvclight.components import (
+    View,
+    Layout,
+    Page,
+    Form,
+    Fields,
+    Menu,
+    SubMenu,
+    MenuItem,
+    )
 
 from uvclight.directives import (
     order,
@@ -17,5 +27,6 @@ from uvclight.directives import (
     name,
     require,
     title,
+    view,
     viewletmanager,
     )
