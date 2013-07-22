@@ -38,6 +38,7 @@ setup(name='uvclight',
           'dolmen.tales',
           'dolmen.forms.base',
           'dolmen.forms.ztk',
+          'dolmen.menu',
           'BeautifulSoup',
           # -*- Extra requirements: -*-
       ],
