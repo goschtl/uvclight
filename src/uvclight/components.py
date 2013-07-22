@@ -2,20 +2,35 @@
 # Copyright (c) 2007-2011 NovaReto GmbH
 # cklinger@novareto.de
 
-from dolmen.view import View, make_layout_response
-from cromlech.webob.response import Response
-from dolmen.layout import Layout
-from dolmen.viewlet import ViewletManager, Viewlet
-from dolmen.forms.base import Form, Fields, action
-from dolmen.forms.ztk.validation import InvariantsValidation
-from dolmen.menu import Menu, Entry as MenuItem
-from zope.component import getMultiAdapter
+from os import path
 from cromlech.browser import ITemplate
-from grokcore.component import adapter, implementer
-from zope.interface import Interface
+from cromlech.webob.response import Response
+from dolmen.forms.base import Form, Fields, action
 from dolmen.forms.base.interfaces import IForm
+from dolmen.forms.ztk.validation import InvariantsValidation
+from dolmen.layout import Layout
+from dolmen.menu import IMenu, Menu as BaseMenu, Entry as MenuItem
+from dolmen.view import View, make_layout_response
+from dolmen.viewlet import ViewletManager, Viewlet
+from grokcore.component import adapter, implementer
 from grokcore.component import baseclass
 from uvclight.utils import get_template
+from uvclight.interfaces import ISubMenu
+from zope.component import getMultiAdapter, getAdapters
+from zope.interface import Interface
+from .directives import viewletmanager
+
+from dolmen.template import TALTemplate
+
+
+TEMPLATES_DIR = path.join(path.dirname(__file__), 'templates')
+
+
+def get_template(filename, dir=None):
+    if dir:
+        return TALTemplate(path.join(path.dirname(dir), 'templates', filename))
+    return TALTemplate(path.join(TEMPLATES_DIR, filename))
+
 
 
 class View(View):
@@ -34,9 +49,30 @@ class Page(View):
     make_response = make_layout_response
 
 
-class Menu(Menu):
+class Menu(BaseMenu):
     baseclass()
     css = "nav"
+
+    submenus = None
+    template = get_template("menu_with_submenus.pt")
+    
+    def update(self):
+        self.submenus = list()
+        BaseMenu.update(self)
+        submenus = getAdapters(
+            (self.context, self.request, self.view, self), ISubMenu)
+        for name, submenu in submenus:
+            submenu.update()
+            self.submenus.append(submenu)
+
+
+class SubMenu(Menu):
+    baseclass()
+    viewletmanager(IMenu)
+
+    def __init__(self, context, request, view, parentmenu=None):
+        Menu.__init__(self, context, request, view)
+        self.parentmenu = parentmenu
 
 
 class Form(Form):

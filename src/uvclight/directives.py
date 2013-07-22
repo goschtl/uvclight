@@ -3,7 +3,7 @@
 # cklinger@novareto.de
 
 
-from cromlech.browser.directives import request as layer
+from cromlech.browser.directives import request as layer, view
 from dolmen.viewlet import slot as viewletmanager
 from grokcore.component import context, name, order, title, implements
 from grokcore.security import require

@@ -6,6 +6,7 @@
   <include package="zope.component" file="meta.zcml" />
   <include package="grokcore.component" file="meta.zcml" />
   <include package="dolmen.layout" file="meta.zcml" />
+  <include package="." file="meta.zcml" />
 
   <include package="dolmen.request" />
   <include package="dolmen.content" />
