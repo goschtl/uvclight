@@ -55,7 +55,7 @@ class Menu(BaseMenu):
 
     submenus = None
     template = get_template("menu_with_submenus.pt")
-    
+
     def update(self):
         self.submenus = list()
         BaseMenu.update(self)
@@ -73,6 +73,9 @@ class SubMenu(Menu):
     def __init__(self, context, request, view, parentmenu=None):
         Menu.__init__(self, context, request, view)
         self.parentmenu = parentmenu
+
+    def update(self):
+        BaseMenu.update(self)
 
 
 class Form(Form):

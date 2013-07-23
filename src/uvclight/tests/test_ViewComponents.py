@@ -6,6 +6,10 @@ from cromlech.browser.testing import TestRequest, TestView
 from grokcore.component import Context
 from zope.component import getMultiAdapter
 from dolmen.viewlet.interfaces import IViewSlot
+from zope.location.interfaces import ILocation
+from zope.interface import alsoProvides
+from cromlech.browser import IPublicationRoot
+from dolmen.viewlet.interfaces import IViewletManager
 
 
 class TestViewComponents:
@@ -46,8 +50,12 @@ class TestViewletComponents:
 class TestFormComponents:
     request = TestRequest()
     context = Context()
+    context.__name__ = "contact"
+    context.__parent__ = None
 
     def test_base_form(self, config):
+        alsoProvides(self.context, ILocation)
+        alsoProvides(self.context, IPublicationRoot)
         form = getMultiAdapter((self.context, self.request), name=u"myform")
         form.update()
         fields = [x.identifier for x in form.fields]
@@ -56,3 +64,20 @@ class TestFormComponents:
         actions = [x.identifier for x in form.actions]
         assert 'save' in actions
         assert form().status == '200 OK'
+
+
+class TestMenuComponents:
+    request = TestRequest()
+    context = Context()
+    context.__name__ = "contact"
+    context.__parent__ = None
+    view = TestView(context, request)
+
+    def test_get_ViewletManager(self, config):
+        alsoProvides(self.context, ILocation)
+        alsoProvides(self.context, IPublicationRoot)
+        globalmenu = getMultiAdapter((self.context, self.request, self.view),
+                                     IViewletManager, name=u"globalmenu")
+        globalmenu.update()
+        assert len(globalmenu.submenus) == 1
+        assert globalmenu.submenus[0].viewlets[0].title == "entry"
