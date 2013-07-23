@@ -29,4 +29,5 @@ from uvclight.directives import (
     title,
     view,
     viewletmanager,
+    menu,
     )

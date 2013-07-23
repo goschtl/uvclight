@@ -74,6 +74,9 @@ class SubMenu(Menu):
         Menu.__init__(self, context, request, view)
         self.parentmenu = parentmenu
 
+    def update(self):
+        BaseMenu.update(self)
+
 
 class Form(Form):
     baseclass()
