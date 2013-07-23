@@ -32,6 +32,22 @@ class TestViewComponents:
         assert html == "<body>Hello World Christian</body>\n"
 
 
+class TestViewComponents:
+    request = TestRequest()
+    context = Context()
+
+    def test_base_view(self, config):
+        view = getMultiAdapter((self.context, self.request), name='myjsonview')
+        assert view is not None
+        view.update()
+        view.render()
+        json = view()
+        assert json == '{"name": "Christian"}'
+        from json import loads
+        pd = loads(json)
+        assert 'name' in pd.keys()
+
+
 class TestViewletComponents:
     request = TestRequest()
     context = Context()

@@ -2,6 +2,9 @@
 # Copyright (c) 2007-2011 NovaReto GmbH
 # cklinger@novareto.de
 
+import json
+
+
 from os import path
 from cromlech.browser import ITemplate
 from cromlech.webob.response import Response
@@ -24,6 +27,16 @@ from .directives import viewletmanager
 class View(View):
     baseclass()
     responseFactory = Response
+
+
+def make_json_response(view, result, name=None):
+    return json.dumps(result)
+
+
+class JSON(View):
+    baseclass()
+    responseFactory = Response
+    make_response = make_json_response
 
 
 class Layout(Layout):

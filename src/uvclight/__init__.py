@@ -16,6 +16,7 @@ from uvclight.components import (
     Menu,
     SubMenu,
     MenuItem,
+    JSON,
     )
 
 from uvclight.directives import (
