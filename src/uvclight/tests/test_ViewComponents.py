@@ -47,11 +47,9 @@ class TestViewComponents:
         pd = loads(json)
         assert 'name' in pd.keys()
         from infrae.testbrowser import Browser
-        import pdb; pdb.set_trace()
         browser = Browser(app)
         browser.handleErrors = False
         browser.open('http://locahost/myjsonview')
-        import pdb; pdb.set_trace()
 
 
 class TestViewletComponents:

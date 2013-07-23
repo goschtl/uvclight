@@ -50,5 +50,5 @@ def app(global_conf, name, zcml_file=None, **kwargs):
         response = publisher.publish(request, site, handle_errors=True)
         notify(PublicationEndsEvent(request, response))
         setSite()
-        return response(environ, start_response)
+        return response
     return publisher
