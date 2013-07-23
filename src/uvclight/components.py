@@ -55,7 +55,7 @@ class Menu(BaseMenu):
 
     submenus = None
     template = get_template("menu_with_submenus.pt")
-    
+
     def update(self):
         self.submenus = list()
         BaseMenu.update(self)
