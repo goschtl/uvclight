@@ -20,18 +20,6 @@ from zope.component import getMultiAdapter, getAdapters
 from zope.interface import Interface
 from .directives import viewletmanager
 
-from dolmen.template import TALTemplate
-
-
-TEMPLATES_DIR = path.join(path.dirname(__file__), 'templates')
-
-
-def get_template(filename, dir=None):
-    if dir:
-        return TALTemplate(path.join(path.dirname(dir), 'templates', filename))
-    return TALTemplate(path.join(TEMPLATES_DIR, filename))
-
-
 
 class View(View):
     baseclass()
@@ -54,7 +42,7 @@ class Menu(BaseMenu):
     css = "nav"
 
     submenus = None
-    template = get_template("menu_with_submenus.pt")
+    #template = get_template("menu_with_submenus.pt")
 
     def update(self):
         self.submenus = list()
