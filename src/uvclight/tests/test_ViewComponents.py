@@ -36,7 +36,7 @@ class TestViewComponents:
     request = TestRequest()
     context = Context()
 
-    def test_base_view(self, config):
+    def test_base_view(self, config, app):
         view = getMultiAdapter((self.context, self.request), name='myjsonview')
         assert view is not None
         view.update()
@@ -46,6 +46,12 @@ class TestViewComponents:
         from json import loads
         pd = loads(json)
         assert 'name' in pd.keys()
+        from infrae.testbrowser import Browser
+        import pdb; pdb.set_trace()
+        browser = Browser(app)
+        browser.handleErrors = False
+        browser.open('http://locahost/myjsonview')
+        import pdb; pdb.set_trace()
 
 
 class TestViewletComponents:

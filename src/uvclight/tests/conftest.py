@@ -12,3 +12,7 @@ from uvclight.tests.testing import configure
 def config(request):
     return configure(request, uvclight.tests.examples, 'configure.zcml')
 
+
+@pytest.fixture(scope="session")
+def app(request):
+    return uvclight.tests.examples.app.app({}, 'app')
