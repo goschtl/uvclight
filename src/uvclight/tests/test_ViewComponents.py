@@ -42,14 +42,16 @@ class TestViewComponents:
         view.update()
         view.render()
         json = view()
-        assert json == '{"name": "Christian"}'
+        assert json.body == '{"name": "Christian"}'
         from json import loads
-        pd = loads(json)
+        pd = loads(json.body)
         assert 'name' in pd.keys()
         from infrae.testbrowser import Browser
         browser = Browser(app)
         browser.handleErrors = False
         browser.open('http://locahost/myjsonview')
+        assert browser.contents == '{"name": "Christian"}'
+        browser.open('http://locahost/myjsonview' )
 
 
 class TestViewletComponents:

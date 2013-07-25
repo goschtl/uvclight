@@ -36,7 +36,13 @@ def make_json_response(view, result, name=None):
 class JSON(View):
     baseclass()
     responseFactory = Response
-    make_response = make_json_response
+
+    def make_response(self, struct):
+        json_result = json.dumps(struct)
+        response = self.responseFactory()
+        response.write(json_result)
+        response.headers['Content-Type'] = 'application/json'
+        return response
 
 
 class Layout(Layout):
