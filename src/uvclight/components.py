@@ -4,7 +4,6 @@
 
 import json
 
-
 from os import path
 from cromlech.browser import ITemplate
 from cromlech.webob.response import Response
