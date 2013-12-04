@@ -76,9 +76,11 @@ class IExtraViews(IMenu):
        Objects etc...
     """
 
+    
 class IPersonalMenu(IMenu):
     """Marker for PersonalMenu
     """
+
 
 class IContextualActionsMenu(IMenu):
     """Marker for PersonalMenu

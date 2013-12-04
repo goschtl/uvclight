@@ -3,8 +3,9 @@
 # cklinger@novareto.de
 
 
-from uvclight.components import ViewletManager, Viewlet
-from uvclight.utils import get_template
+from .components import ViewletManager, Viewlet
+from .utils import get_template
+
 from dolmen.forms.base import SUCCESS, FAILURE, action, Action, Fields, Actions
 from dolmen.forms.base.interfaces import ISuccessMarker
 from dolmen.forms.base.markers import Marker

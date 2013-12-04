@@ -2,6 +2,7 @@
 # Copyright (c) 2007-2011 NovaReto GmbH
 # cklinger@novareto.de
 
+import json
 from os import path
 from dolmen.template import TALTemplate
 
@@ -13,3 +14,11 @@ def get_template(filename, dir=None):
     if dir:
         return TALTemplate(path.join(path.dirname(dir), 'templates', filename))
     return TALTemplate(path.join(TEMPLATES_DIR, filename))
+
+
+def make_json_response(view, result, name=None):
+    json_result = json.dumps(result)
+    response = view.responseFactory()
+    response.write(json_result)
+    response.headers['Content-Type'] = 'application/json'
+    return response

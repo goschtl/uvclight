@@ -2,8 +2,6 @@
 # Copyright (c) 2007-2011 NovaReto GmbH
 # cklinger@novareto.de
 
-import json
-
 from os import path
 from cromlech.browser import ITemplate
 from cromlech.webob.response import Response
@@ -12,36 +10,16 @@ from dolmen.forms.base.interfaces import IForm
 from dolmen.forms.ztk.validation import InvariantsValidation
 from dolmen.layout import Layout
 from dolmen.menu import IMenu, Menu as BaseMenu, Entry as MenuItem
-from dolmen.view import View, make_layout_response
+from dolmen.view import View as BaseView, make_layout_response
 from dolmen.viewlet import ViewletManager, Viewlet
 from grokcore.component import adapter, implementer
 from grokcore.component import baseclass
-from uvclight.utils import get_template
-from uvclight.interfaces import ISubMenu
 from zope.component import getMultiAdapter, getAdapters
 from zope.interface import Interface
+
 from .directives import viewletmanager
-
-
-class View(View):
-    baseclass()
-    responseFactory = Response
-
-
-def make_json_response(view, result, name=None):
-    return json.dumps(result)
-
-
-class JSON(View):
-    baseclass()
-    responseFactory = Response
-
-    def make_response(self, struct):
-        json_result = json.dumps(struct)
-        response = self.responseFactory()
-        response.write(json_result)
-        response.headers['Content-Type'] = 'application/json'
-        return response
+from .utils import get_template, make_json_response
+from .interfaces import ISubMenu
 
 
 class Layout(Layout):
@@ -49,10 +27,19 @@ class Layout(Layout):
     responseFactory = Response
 
 
-class Page(View):
+class View(BaseView):
     baseclass()
     responseFactory = Response
+
+
+class Page(View):
+    baseclass()
     make_response = make_layout_response
+
+
+class JSON(View):
+    baseclass()
+    make_response = make_json_response
 
 
 class Menu(BaseMenu):

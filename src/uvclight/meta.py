@@ -22,7 +22,6 @@ class SubMenuGrokker(martian.ClassGrokker):
             config.action(
                 discriminator=('SubMenu', context, request, view, slot),
                 callable=provideAdapter,
-            args=(factory, (context, request, view, slot),
-                  ISubMenu, u''))
+                args=(factory, (context, request, view, slot), ISubMenu, u''))
             return True
         return False
