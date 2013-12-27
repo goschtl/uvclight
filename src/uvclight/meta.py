@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 import martian
-from dolmen.menu import IMenu
 from zope.interface import Interface
 from zope.component import provideAdapter
 from .interfaces import ISubMenu

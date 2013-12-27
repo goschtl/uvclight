@@ -15,6 +15,7 @@ def render_slot(slot):
 try:
     # We might has zope.security
     from zope.security._proxy import _Proxy as Proxy
+    import zope.security
 
     def resolve_slot(slot):
         """If slot is a Proxy, we need to check the security.
