@@ -4,14 +4,14 @@
 
 from cromlech.browser import ITemplate
 from cromlech.webob.response import Response
-from dolmen.forms.base import Form
+from dolmen.forms.base import Form, Fields
 from dolmen.forms.base.interfaces import IForm
 from dolmen.forms.ztk.validation import InvariantsValidation
 from dolmen.layout import Layout
 from dolmen.menu import IMenu, Menu as BaseMenu
 from dolmen.view import View as BaseView, make_layout_response
-from grokcore.component import adapter, implementer
-from grokcore.component import baseclass
+from grokcore.component import adapter, implementer, baseclass
+from dolmen.viewlet import ViewletManager, Viewlet
 from zope.component import getMultiAdapter, getAdapters
 from zope.interface import Interface
 

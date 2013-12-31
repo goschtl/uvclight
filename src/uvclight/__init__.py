@@ -19,8 +19,6 @@ from uvclight.components import (
     Form,
     Fields,
     Menu,
-    SubMenu,
-    MenuItem,
     JSON,
     )
 
