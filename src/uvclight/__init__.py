@@ -6,6 +6,7 @@
 from .components import ViewletManager, Viewlet
 from .utils import get_template
 
+from cromlech.browser import IPublicationRoot as IRootObject
 from dolmen.forms.base import SUCCESS, FAILURE, action, Action, Fields, Actions
 from dolmen.forms.base.interfaces import ISuccessMarker
 from dolmen.forms.base.markers import Marker
