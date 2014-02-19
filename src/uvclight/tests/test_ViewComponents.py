@@ -125,4 +125,4 @@ class TestTableComponent:
     def test_tablePage(self, config):
         table = getMultiAdapter((self.context, self.request), name="tablepage")
         table.update()
-        assert 1 == len(table.columns)
+        assert len(table.columns) == 2

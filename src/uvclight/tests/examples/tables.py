@@ -30,3 +30,12 @@ class IdColumn(uvclight.Column):
 
     def renderCell(self, item):
         return item
+
+
+class SpecialColumn(uvclight.Column):
+    uvclight.view(TablePage)
+    header = u"Special Column"
+    id = "special_id"
+
+    def renderCell(self, item):
+        return item
