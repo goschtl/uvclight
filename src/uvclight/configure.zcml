@@ -33,13 +33,5 @@
   <grok:grok package="dolmen.template" />
   <grok:grok package="uvclight.components" />
 
-
-<!--
-  <include package="dolmen.app.container" />
-  <include package="dolmen.breadcrumbs" />
-
-  <grok:grok package="dolmen.location" />
-  <include package="uvc.layout" />
--->
 </configure>
 
