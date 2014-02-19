@@ -8,7 +8,7 @@ from dolmen.forms.base import Form, Fields
 from dolmen.forms.base.interfaces import IForm
 from dolmen.forms.ztk.validation import InvariantsValidation
 from dolmen.layout import Layout
-from dolmen.menu import IMenu, Menu as BaseMenu
+from dolmen.menu import IMenu, Menu as BaseMenu, Entry as MenuItem
 from dolmen.view import View as BaseView, make_layout_response
 from grokcore.component import adapter, implementer, baseclass
 from dolmen.viewlet import ViewletManager, Viewlet
@@ -18,6 +18,8 @@ from zope.interface import Interface
 from .directives import viewletmanager
 from .utils import get_template, make_json_response
 from .interfaces import ISubMenu
+from z3c.table.table import Table
+from z3c.table.column import Column
 
 
 class Layout(Layout):
@@ -93,3 +95,17 @@ class Form(Form):
 def menu_template(context, request):
     """default template for the menu"""
     return get_template('form.cpt', __file__)
+
+
+class TableView(Table, View):
+    baseclass()
+
+    def update(self):
+        Table.update(self)
+
+
+class TablePage(Table, Page):
+    baseclass()
+
+    def update(self):
+        Table.update(self)

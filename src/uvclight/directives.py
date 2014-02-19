@@ -5,7 +5,7 @@
 
 from cromlech.browser.directives import request as layer, view
 from dolmen.viewlet import slot as viewletmanager
-from grokcore.component import context, name, order, title, implements
+from grokcore.component import context, name, order, title, implements, provides
 from grokcore.security import require
 from zope.interface import implements, implementer
 from dolmen.menu import menu

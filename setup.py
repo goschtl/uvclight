@@ -40,6 +40,7 @@ setup(name='uvclight',
           'dolmen.forms.ztk',
           'dolmen.menu',
           'BeautifulSoup',
+          'z3c.table',
           # -*- Extra requirements: -*-
       ],
       entry_points="""

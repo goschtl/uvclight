@@ -32,7 +32,7 @@ class TestViewComponents:
         assert html == "<body>Hello World Christian</body>\n"
 
 
-class TestViewComponents:
+class TestJSONComponents:
     request = TestRequest()
     context = Context()
 
@@ -103,3 +103,18 @@ class TestMenuComponents:
         globalmenu.update()
         assert len(globalmenu.submenus) == 1
         assert globalmenu.submenus[0].viewlets[0].title == "entry"
+
+
+class TestTableComponent:
+    request = TestRequest()
+    context = Context()
+
+    def test_tableView(self, config):
+        table = getMultiAdapter((self.context, self.request), name="tableview")
+        table.update()
+        assert 1 == len(table.columns)
+
+    def test_tablePage(self, config):
+        table = getMultiAdapter((self.context, self.request), name="tablepage")
+        table.update()
+        assert 1 == len(table.columns)
