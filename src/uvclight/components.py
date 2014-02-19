@@ -97,6 +97,26 @@ def menu_template(context, request):
     return get_template('form.cpt', __file__)
 
 
+class Table(Table):
+
+    def getBatchSize(self):
+        return int(self.request.form.get(self.prefix + '-batchSize',
+            self.batchSize))
+
+    def getBatchStart(self):
+        return int(self.request.form.get(self.prefix + '-batchStart',
+            self.batchStart))
+
+    def getSortOn(self):
+        """Returns sort on column id."""
+        return self.request.form.get(self.prefix + '-sortOn', self.sortOn)
+
+    def getSortOrder(self):
+        """Returns sort order criteria."""
+        return self.request.form.get(self.prefix + '-sortOrder',
+            self.sortOrder)
+
+
 class TableView(Table, View):
     baseclass()
 
