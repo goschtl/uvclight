@@ -25,6 +25,8 @@ class TablePage(uvclight.TablePage):
 
 
 class IdColumn(uvclight.Column):
+    header = u"ID Column"
+    id = "id_id"
 
     def renderCell(self, item):
         return item

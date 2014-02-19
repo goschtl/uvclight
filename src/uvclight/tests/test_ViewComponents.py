@@ -10,6 +10,7 @@ from zope.location.interfaces import ILocation
 from zope.interface import alsoProvides
 from cromlech.browser import IPublicationRoot
 from dolmen.viewlet.interfaces import IViewletManager
+from z3c.table.interfaces import IColumn
 
 
 class TestViewComponents:
@@ -113,6 +114,13 @@ class TestTableComponent:
         table = getMultiAdapter((self.context, self.request), name="tableview")
         table.update()
         assert 1 == len(table.columns)
+        column = getMultiAdapter(
+            (self.context, self.request, table),
+            IColumn,
+            name="idcolumn"
+        )
+        assert column.id == "id_id"
+        assert column.header == "ID Column"
 
     def test_tablePage(self, config):
         table = getMultiAdapter((self.context, self.request), name="tablepage")
