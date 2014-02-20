@@ -57,6 +57,7 @@ tests_require = [
     'zope.configuration',
     'zope.schema',
     'zope.testing',
+    'cromlech.browser[test]',
     ]
 
 
@@ -87,6 +88,6 @@ setup(
     entry_points="""
       # -*- Entry points: -*-
       [chameleon.tales]
-      provider = uvclight.tales:SlotExpr
+      provider = dolmen.tales:SlotExpr
       """,
       )
