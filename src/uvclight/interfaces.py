@@ -46,6 +46,10 @@ class IFooter(IViewSlot):
     """ """
 
 
+class IExtraInfo(IViewSlot):
+    """ """
+
+    
 #
 ### Menus
 #

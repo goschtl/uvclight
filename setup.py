@@ -46,7 +46,6 @@ mongo_requires = [
 
 traject_requires = [
     'traject',
-    'dawnlight',
     ]
 
 tests_require = [

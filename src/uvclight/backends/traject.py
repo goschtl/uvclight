@@ -12,10 +12,14 @@ try:
     class Model(object):
         context(Interface)
 
+        model = None
         pattern = None
 
         @staticmethod
         def factory(*args):
+            raise NotImplementedError
+
+        def arguments(inst):
             raise NotImplementedError
 
 
