@@ -5,6 +5,7 @@ version = '0.1'
 
 base_requires = [
     'cromlech.browser',
+    'cromlech.configuration',
     'cromlech.dawnlight',
     'cromlech.webob',
     'dolmen.content',
@@ -51,7 +52,6 @@ traject_requires = [
 tests_require = [
     'zope.location',
     'zope.event',
-    'cromlech.configuration',
     'infrae.testbrowser',
     'pytest',
     'zope.configuration',
