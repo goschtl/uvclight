@@ -92,6 +92,9 @@ class Form(Form):
 
     template = None
 
+    def application_url(self):
+        return self.request.application_url
+    
     def render(self):
         """Template is taken from the template attribute or searching
         for an adapter to ITemplate for entry and request
@@ -150,12 +153,19 @@ class AddForm(Form):
 
 
 class EditForm(crud.Edit, Form):
-    pass
+    baseclass()
 
 
 class DisplayForm(crud.Display, Form):
-    pass
+    baseclass()
 
+
+class DefaultView(DisplayForm):
+    name('index')
+    baseclass()
+    responseFactory = Response
+    make_response = make_layout_response
+    
 
 class DeleteForm(crud.Delete, Form):
     pass
