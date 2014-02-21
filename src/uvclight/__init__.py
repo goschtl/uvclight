@@ -22,6 +22,7 @@ from uvclight.components import (
     View,
     Layout,
     Page,
+    Index,
     Form,
     Fields,
     Menu,

@@ -10,7 +10,7 @@ from dolmen.forms.ztk.validation import InvariantsValidation
 from dolmen.layout import Layout
 from dolmen.menu import IMenu, Menu as BaseMenu, Entry as MenuItem
 from dolmen.view import View as BaseView, make_layout_response
-from grokcore.component import adapter, implementer, baseclass
+from grokcore.component import adapter, implementer, baseclass, name
 from dolmen.viewlet import ViewletManager, Viewlet
 from zope.component import getMultiAdapter, getAdapters
 from zope.interface import Interface
@@ -31,11 +31,20 @@ class View(BaseView):
     baseclass()
     responseFactory = Response
 
+    def application_url(self):
+        return self.request.application_url
 
+    
 class Page(View):
     baseclass()
     make_response = make_layout_response
 
+
+class Index(Page):
+    baseclass()
+    name('index')
+    make_response = make_layout_response
+    
 
 class JSON(View):
     baseclass()
