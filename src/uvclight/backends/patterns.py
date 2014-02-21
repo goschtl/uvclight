@@ -9,6 +9,12 @@ try:
     PATTERNS = traject.Patterns()
 
 
+    class DefaultModel(object):
+
+        def __init__(self, **kw):
+            self.kw = kw
+
+
     class Model(object):
         context(Interface)
 
