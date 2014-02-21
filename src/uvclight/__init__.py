@@ -11,6 +11,11 @@ from dolmen.forms.base import SUCCESS, FAILURE, action, Action, Fields, Actions
 from dolmen.forms.base.interfaces import ISuccessMarker
 from dolmen.forms.base.markers import Marker
 from dolmen.view import query_view
+from dolmen.menu import menuentry
+
+from uvclight.interfaces import (
+    IContextualActionsMenu
+    )
 
 
 from uvclight.components import (
@@ -40,4 +45,5 @@ from uvclight.directives import (
     view,
     viewletmanager,
     menu,
+    schema,
     )

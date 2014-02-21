@@ -9,3 +9,4 @@ from grokcore.component import context, name, order, title, implements, provides
 from grokcore.security import require
 from zope.interface import implements, implementer
 from dolmen.menu import menu
+from dolmen.content import schema

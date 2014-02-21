@@ -47,7 +47,6 @@ class Menu(BaseMenu):
     css = "nav"
 
     submenus = None
-    #template = get_template("menu_with_submenus.pt")
 
     def update(self):
         self.submenus = list()
