@@ -20,6 +20,11 @@ from .utils import get_template, make_json_response
 from .interfaces import ISubMenu
 from z3c.table.table import Table
 from z3c.table.column import Column
+from dolmen.forms import crud
+from dolmen.forms.base import action
+from zope.event import notify
+import zope.lifecycleevent
+from cromlech.browser.exceptions import HTTPFound
 
 
 class Layout(Layout):
@@ -103,6 +108,57 @@ class Form(Form):
 def menu_template(context, request):
     """default template for the menu"""
     return get_template('form.cpt', __file__)
+
+
+
+class AddForm(Form):
+    baseclass()
+    _finishedAdd = False
+
+    @action(u'Speichern', identifier="uvcsite.add")
+    def handleAdd(self):
+        data, errors = self.extractData()
+        if errors:
+            self.flash('Es sind Fehler aufgetreten')
+            return
+        obj = self.createAndAdd(data)
+        if obj is not None:
+            # mark only as finished if we get the new object
+            self._finishedAdd = True
+
+    def createAndAdd(self, data):
+        obj = self.create(data)
+        notify(zope.lifecycleevent.ObjectCreatedEvent(obj))
+        self.add(obj)
+        return obj
+
+    def create(self, data):
+        raise NotImplementedError
+
+    def add(self, object):
+        raise NotImplementedError
+
+    def nextURL(self):
+        raise NotImplementedError
+
+    def render(self):
+        if self._finishedAdd:
+            raise HTTPFound(self.nextURL())
+            self.request.response.redirect(self.nextURL())
+            return ""
+        return super(AddForm, self).render()
+
+
+class EditForm(crud.Edit, Form):
+    pass
+
+
+class DisplayForm(crud.Display, Form):
+    pass
+
+
+class DeleteForm(crud.Delete, Form):
+    pass
 
 
 class Table(Table):
