@@ -37,6 +37,7 @@ from uvclight.components import (
     TableView,
     TablePage,
     Column,
+    REST,
     )
 
 from uvclight.directives import (

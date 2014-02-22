@@ -25,6 +25,11 @@ from dolmen.forms.base import action
 from zope.event import notify
 import zope.lifecycleevent
 from cromlech.browser.exceptions import HTTPFound
+from cromlech.browser.interfaces import ITypedRequest
+from dolmen.request.decorators import request_type
+from cromlech.browser.exceptions import HTTPRedirect
+from cromlech.browser.utils import redirect_exception_response
+from .directives import layer
 
 
 class Layout(Layout):
@@ -39,7 +44,7 @@ class View(BaseView):
     def application_url(self):
         return self.request.application_url
 
-    
+
 class Page(View):
     baseclass()
     make_response = make_layout_response
@@ -49,7 +54,7 @@ class Index(Page):
     baseclass()
     name('index')
     make_response = make_layout_response
-    
+
 
 class JSON(View):
     baseclass()
@@ -94,7 +99,7 @@ class Form(Form):
 
     def application_url(self):
         return self.request.application_url
-    
+
     def render(self):
         """Template is taken from the template attribute or searching
         for an adapter to ITemplate for entry and request
@@ -165,7 +170,7 @@ class DefaultView(DisplayForm):
     baseclass()
     responseFactory = Response
     make_response = make_layout_response
-    
+
 
 class DeleteForm(crud.Delete, Form):
     pass
@@ -203,3 +208,39 @@ class TablePage(Table, Page):
 
     def update(self):
         Table.update(self)
+
+
+@request_type('rest')
+class IRESTRequest(ITypedRequest):
+    """REST/JSON request"""
+
+
+class MethodNotAllowed(Exception):
+    """Exception indicating that an attempted REST method is not allowed."""
+
+
+class REST(View):
+    layer(IRESTRequest)
+    baseclass()
+
+    def __call__(self):
+        try:
+            method = getattr(self, self.request.method)
+            result = method()
+            return self.make_response(result)
+        except HTTPRedirect, exc:
+            return redirect_exception_response(self.responseFactory, exc)
+
+    def GET(self):
+        raise MethodNotAllowed(self.context, self.request)
+
+    def POST(self):
+        raise MethodNotAllowed(self.context, self.request)
+
+    def PUT(self):
+        raise MethodNotAllowed(self.context, self.request)
+
+    def DELETE(self):
+        raise MethodNotAllowed(self.context, self.request)
+
+

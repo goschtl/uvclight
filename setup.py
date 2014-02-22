@@ -10,6 +10,7 @@ base_requires = [
     'cromlech.webob',
     'dolmen.content',
     'dolmen.forms.base',
+    'dolmen.forms.crud',
     'dolmen.forms.ztk',
     'dolmen.layout',
     'dolmen.location',
