@@ -14,7 +14,7 @@ from dolmen.view import query_view
 from dolmen.menu import menuentry
 
 from uvclight.interfaces import (
-    IContextualActionsMenu
+    IContextualActionsMenu,
     )
 
 

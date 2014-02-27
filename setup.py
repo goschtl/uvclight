@@ -31,6 +31,12 @@ base_requires = [
     'Chameleon',
     ]
 
+auth_requires = [
+    'barrel',
+    'cromlech.security',
+    'cromlech.wsgistate',
+]
+
 zodb_requires = [
     'ZODB',
     'persistent',
@@ -79,6 +85,7 @@ setup(
     zip_safe=False,
     install_requires=base_requires,
     extras_require={
+        'auth': auth_requires,
         'mongo': mongo_requires,
         'sql': sql_requires,
         'test': tests_require,
