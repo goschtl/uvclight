@@ -32,6 +32,7 @@
   <grok:grok package="dolmen.location" />
   <grok:grok package="dolmen.template" />
   <grok:grok package="uvclight.components" />
+  <grok:grok package="uvclight.views" />
 
 </configure>
 
