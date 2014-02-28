@@ -2,9 +2,26 @@
 # Copyright (c) 2007-2013 NovaReto GmbH
 # cklinger@novareto.de
 
+from zope.interface import Interface, implementer
 
 from dolmen.menu.interfaces import IMenu
 from dolmen.viewlet.interfaces import IViewSlot
+
+
+#
+### User Logged In Event
+#
+
+
+class IUserLoggedInEvent(Interface):
+    """ """
+
+
+@implementer(IUserLoggedInEvent)
+class UserLoggedInEvent(object):
+
+    def __init__(self, principal):
+        self.principal = principal
 
 
 #
@@ -49,7 +66,7 @@ class IFooter(IViewSlot):
 class IExtraInfo(IViewSlot):
     """ """
 
-    
+
 #
 ### Menus
 #
@@ -80,7 +97,7 @@ class IExtraViews(IMenu):
        Objects etc...
     """
 
-    
+
 class IPersonalMenu(IMenu):
     """Marker for PersonalMenu
     """

@@ -10,6 +10,7 @@ base_requires = [
     'cromlech.webob',
     'dolmen.content',
     'dolmen.forms.base',
+    'dolmen.forms.crud',
     'dolmen.forms.ztk',
     'dolmen.layout',
     'dolmen.location',
@@ -29,6 +30,12 @@ base_requires = [
     'zope.security',
     'Chameleon',
     ]
+
+auth_requires = [
+    'barrel',
+    'cromlech.security',
+    'cromlech.wsgistate',
+]
 
 zodb_requires = [
     'ZODB',
@@ -78,6 +85,7 @@ setup(
     zip_safe=False,
     install_requires=base_requires,
     extras_require={
+        'auth': auth_requires,
         'mongo': mongo_requires,
         'sql': sql_requires,
         'test': tests_require,

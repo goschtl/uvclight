@@ -15,7 +15,7 @@ from zope.component.hooks import getSite
 
 
 from uvclight.interfaces import (
-    IContextualActionsMenu
+    IContextualActionsMenu,
     )
 
 
@@ -38,6 +38,7 @@ from uvclight.components import (
     TableView,
     TablePage,
     Column,
+    REST,
     )
 
 from uvclight.directives import (

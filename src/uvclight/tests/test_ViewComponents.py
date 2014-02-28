@@ -2,6 +2,8 @@
 # Copyright (c) 2007-2011 NovaReto GmbH
 # cklinger@novareto.de
 
+import pytest
+
 from cromlech.browser.testing import TestRequest, TestView
 from grokcore.component import Context
 from zope.component import getMultiAdapter
@@ -11,6 +13,8 @@ from zope.interface import alsoProvides
 from cromlech.browser import IPublicationRoot
 from dolmen.viewlet.interfaces import IViewletManager
 from z3c.table.interfaces import IColumn
+from uvclight.components import IRESTRequest
+from uvclight.components import MethodNotAllowed
 
 
 class TestViewComponents:
@@ -52,7 +56,7 @@ class TestJSONComponents:
         browser.handleErrors = False
         browser.open('http://locahost/myjsonview')
         assert browser.contents == '{"name": "Christian"}'
-        browser.open('http://locahost/myjsonview' )
+        browser.open('http://locahost/myjsonview')
 
 
 class TestViewletComponents:
@@ -126,3 +130,27 @@ class TestTableComponent:
         table = getMultiAdapter((self.context, self.request), name="tablepage")
         table.update()
         assert len(table.columns) == 2
+
+
+class TestRESTComponent:
+    request = TestRequest()
+    context = Context()
+
+    def test_RestView(self, config):
+        alsoProvides(self.request, IRESTRequest)
+        rest = getMultiAdapter(
+            (self.context, self.request),
+            name="restview")
+        assert rest.PUT() == "PUT"
+        assert rest.GET() == "GET"
+        assert rest.DELETE() == "DELETE"
+        assert rest.POST() == "POST"
+
+    def test_RestViewNoContent(self, config):
+        alsoProvides(self.request, IRESTRequest)
+        rest = getMultiAdapter(
+            (self.context, self.request),
+            name="restviewnoput")
+        assert rest.GET() == "GET"
+        with pytest.raises(MethodNotAllowed):
+            rest.PUT()
