@@ -8,6 +8,7 @@ from dolmen.forms.base import Form, Fields
 from dolmen.forms.base.interfaces import IForm
 from dolmen.forms.ztk.validation import InvariantsValidation
 from dolmen.layout import Layout
+from dolmen.location import get_absolute_url
 from dolmen.menu import IMenu, Menu as BaseMenu, Entry as MenuItem
 from dolmen.view import View as BaseView, make_layout_response
 from grokcore.component import adapter, implementer, baseclass, name
@@ -36,6 +37,9 @@ class View(BaseView):
     baseclass()
     responseFactory = Response
 
+    def url(self, obj):
+        return get_absolute_url(obj, self.request)
+    
     def application_url(self):
         return self.request.application_url
 

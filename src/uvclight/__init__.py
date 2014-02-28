@@ -2,7 +2,6 @@
 # Copyright (c) 2007-2011 NovaReto GmbH
 # cklinger@novareto.de
 
-
 from .components import ViewletManager, Viewlet
 from .utils import get_template, current_principal
 
@@ -12,6 +11,8 @@ from dolmen.forms.base.interfaces import ISuccessMarker
 from dolmen.forms.base.markers import Marker
 from dolmen.view import query_view
 from dolmen.menu import menuentry
+from zope.component.hooks import getSite
+
 
 from uvclight.interfaces import (
     IContextualActionsMenu
