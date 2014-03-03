@@ -33,16 +33,7 @@ from dolmen.request.decorators import request_type
 from cromlech.browser.exceptions import HTTPRedirect
 from cromlech.browser.utils import redirect_exception_response
 from .directives import layer
-from dolmen.location import get_absolute_url 
-
-
-class LinkColumn(LinkColumn):
-
-    def getLinkURL(self, item):
-        """Setup link url."""
-        if self.linkName is not None:
-            return '%s/%s' % (get_absolute_url(item, self.request), self.linkName)
-        return get_absolute_url(item, self.request)
+from dolmen.template import TALTemplate
 
 
 class Layout(Layout):
@@ -56,7 +47,7 @@ class View(BaseView):
 
     def url(self, obj):
         return get_absolute_url(obj, self.request)
-    
+
     def application_url(self):
         return self.request.application_url
 
@@ -110,6 +101,7 @@ class Form(Form):
     responseFactory = Response
     make_response = make_layout_response
     dataValidators = [InvariantsValidation]
+    FORM_MACROS = get_template('formmacro.cpt')
 
     template = None
 
@@ -118,6 +110,11 @@ class Form(Form):
 
     def flash(self, *args, **kwargs):
         return
+
+    def namespace(self):
+        namespace = super(Form, self).namespace()
+        namespace['macro'] = self.FORM_MACROS.macros
+        return namespace
 
     def render(self):
         """Template is taken from the template attribute or searching
@@ -227,6 +224,15 @@ class TablePage(Table, Page):
 
     def update(self):
         Table.update(self)
+
+
+class LinkColumn(LinkColumn):
+
+    def getLinkURL(self, item):
+        """Setup link url."""
+        if self.linkName is not None:
+            return '%s/%s' % (get_absolute_url(item, self.request), self.linkName)
+        return get_absolute_url(item, self.request)
 
 
 @request_type('rest')

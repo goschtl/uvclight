@@ -1,0 +1,36 @@
+<form metal:define-macro="editform" action="." novalidate="novalidate" tal:attributes="action view.action_url" method="post"
+      enctype="multipart/form-data" class="form-horizontal">
+  <h2
+      tal:condition="view.label"
+      tal:content="view.label">Label</h2>
+  <p tal:condition="view.description"
+     tal:content="view.description">Description</p>
+
+  <p class="alert-message block-message"
+     tal:condition="view.status"
+     tal:content="view.status">Status</p>
+
+  <fieldset metal:define-macro="form-fieldset">
+    <legend tal:condition="hasattr(view, 'legend')" tal:content="view.legend"> </legend>
+      <div id="extrainfo" tal:replace="structure provider: uvcsite.extrainfo"/>
+    <div class="fields" tal:condition="view.fieldWidgets">
+      <div class="control-group" tal:repeat="widget view.fieldWidgets" 
+           tal:attributes="id 'field-' + widget.htmlId(); class widget.error and 'control-group error' or 'control-group'">
+	     <label class="control-label" for="#" tal:attributes="for widget.htmlId()"> 
+         <span tal:content="widget.title"> </span> <span tal:condition="widget.required"> * </span> 
+       </label>
+	     <tal:error tal:define="error widget.error" tal:condition="error" />
+	     <div class="input controls">
+	        <tal:widget tal:content="structure widget.render()" />
+	        <span class="help-inline" tal:condition="widget.error" tal:content="widget.error.title"> Error </span>
+          <p class="help-block" tal:condition="widget.description" tal:content="structure widget.description" tal:attributes="for widget.htmlId()"></p>
+	     </div>
+      </div>
+      </div>
+    <div class="form-actions" tal:condition="view.actionWidgets">
+      <span class="action" tal:repeat="widget view.actionWidgets">
+	        <tal:widget tal:content="structure widget.render()" />
+      </span>
+    </div>
+  </fieldset>
+</form>
