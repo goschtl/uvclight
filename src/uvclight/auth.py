@@ -5,19 +5,26 @@
 try:
     import string
     from barrel import form
-    from cromlech.browser import getSession
+    from dolmen.view import query_view_layout
+    from cromlech.browser import getSession, IView, IResponseFactory, ILayout
     from cromlech.webob import Request, Response
+    from cromlech.security import Interaction
+    from cromlech.browser import IPublicationRoot
     from zope.event import notify
     from uvclight.interfaces import UserLoggedInEvent
     from cromlech.security import Principal
+    from zope.location import Location
+    from zope.component import queryMultiAdapter
     from zope.security.simplepolicies import ParanoidSecurityPolicy
     from zope.security import canAccess
+    from zope.interface import Interface, implementer
     from zope.security.proxy import removeSecurityProxy
 
 
     class Principal(Principal):
 
-        def __init__(self, id, title=u'', description=u'', roles=[], permissions=[]):
+        def __init__(self, id, title=u'', description=u'', roles=[],
+                     permissions=[]):
             self.id = id
             self.title = title
             self.description = description
@@ -25,19 +32,8 @@ try:
             self.permissions = permissions
 
 
-    class MyLayout(object):
-        def render(self, result, **namespace):
-            return "<html> %s </html>" % result
-
-
-    LAYOUT = MyLayout()
-
-
-    def render_in_layout(result, responseFactory=Response, **namespace):
-        wrapped = LAYOUT.render(result, **namespace)
-        response = responseFactory()
-        response.write(wrapped or u'')
-        return response
+    def get_layout(authform, request):
+        return queryMultiAdapter((request, authform), ILayout, name="")
 
 
     default_template = """
@@ -72,16 +68,22 @@ try:
         return False
 
 
-    class Auth(form.FormAuth):
+    @implementer(IPublicationRoot, IView, IResponseFactory)
+    class Auth(Location, form.FormAuth):
         """
         """
         session_user_key = "user"
         template = string.Template(default_template)
-
+        __component_name__ = '/login'
+        
         def __init__(self, users, realm):
             self.users = users
             self.realm = realm
 
+        @property
+        def context(self):
+            return self
+            
         def valid_user(self, username, password):
             """Is this a valid username/password? (True or False)"""
             pwd = self.users.get(username, None)
@@ -117,10 +119,13 @@ try:
             request = Request(environ)
             namespace = {'context': self,
                          'request': request,
-                         'view': self,
-                         'content': html}
-            layout = render_in_layout(html, **namespace)
-            return layout(environ, start_response)
+                         'view': self}
+            layout = get_layout(self, request)
+            with Interaction():
+                result = layout(content=html, **namespace)
+                response = Response()
+                response.write(result)
+            return response(environ, start_response)
 
         def __call__(self, app):
             """If request is not from an authenticated user, complain."""
@@ -146,7 +151,8 @@ try:
                 return True
             principals = [p.principal for p in self.participations]
             for principal in principals:
-                if permission in principal.permissions:
+                permissions = getattr(principal, 'permissions', set())
+                if permission in permissions:
                     return True
             return False
 
