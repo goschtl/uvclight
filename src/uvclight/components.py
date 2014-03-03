@@ -12,6 +12,8 @@ from dolmen.location import get_absolute_url
 from dolmen.menu import IMenu, Menu as BaseMenu, Entry as MenuItem
 from dolmen.view import View as BaseView, make_layout_response
 from grokcore.component import adapter, implementer, baseclass, name
+from grokcore.component import Adapter, MultiAdapter, GlobalUtility
+from grokcore.security import Permission
 from dolmen.viewlet import ViewletManager, Viewlet
 from zope.component import getMultiAdapter, getAdapters
 from zope.interface import Interface
@@ -20,7 +22,7 @@ from .directives import viewletmanager
 from .utils import get_template, make_json_response
 from .interfaces import ISubMenu
 from z3c.table.table import Table
-from z3c.table.column import Column
+from z3c.table.column import Column, GetAttrColumn, LinkColumn
 from dolmen.forms import crud
 from dolmen.forms.base import action
 from zope.event import notify
@@ -31,6 +33,16 @@ from dolmen.request.decorators import request_type
 from cromlech.browser.exceptions import HTTPRedirect
 from cromlech.browser.utils import redirect_exception_response
 from .directives import layer
+from dolmen.location import get_absolute_url 
+
+
+class LinkColumn(LinkColumn):
+
+    def getLinkURL(self, item):
+        """Setup link url."""
+        if self.linkName is not None:
+            return '%s/%s' % (get_absolute_url(item, self.request), self.linkName)
+        return get_absolute_url(item, self.request)
 
 
 class Layout(Layout):
@@ -103,6 +115,9 @@ class Form(Form):
 
     def application_url(self):
         return self.request.application_url
+
+    def flash(self, *args, **kwargs):
+        return
 
     def render(self):
         """Template is taken from the template attribute or searching

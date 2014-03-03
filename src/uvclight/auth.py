@@ -93,8 +93,6 @@ try:
 
         def session_dict(self, environ):
             ses = getSession()
-            print "SESSION DICT", ses
-            import pdb; pdb.set_trace()
             return ses
 
         def save_session(self):
@@ -144,6 +142,8 @@ try:
     class SimpleSecurityPolicy(ParanoidSecurityPolicy):
 
         def checkPermission(self, permission, object):
+            if permission == 'zope.View':
+                return True
             principals = [p.principal for p in self.participations]
             for principal in principals:
                 if permission in principal.permissions:
