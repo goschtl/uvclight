@@ -2,38 +2,44 @@
 # Copyright (c) 2007-2011 NovaReto GmbH
 # cklinger@novareto.de
 
+import zope.lifecycleevent
+
 from cromlech.browser import ITemplate
+from cromlech.browser.exceptions import HTTPFound
+from cromlech.browser.exceptions import HTTPRedirect
+from cromlech.browser.exceptions import REDIRECTIONS
+from cromlech.browser.interfaces import ITypedRequest
+from cromlech.browser.utils import redirect_exception_response
 from cromlech.webob.response import Response
+from dolmen.forms import crud
 from dolmen.forms.base import Form, Fields
+from dolmen.forms.base import action
 from dolmen.forms.base.interfaces import IForm
 from dolmen.forms.ztk.validation import InvariantsValidation
 from dolmen.layout import Layout
 from dolmen.location import get_absolute_url
 from dolmen.menu import IMenu, Menu as BaseMenu, Entry as MenuItem
+from dolmen.message import BASE_MESSAGE_TYPE
+from dolmen.message.utils import send
+from dolmen.request.decorators import request_type
+from dolmen.template import TALTemplate
 from dolmen.view import View as BaseView, make_layout_response
-from grokcore.component import adapter, implementer, baseclass, name
-from grokcore.component import Adapter, MultiAdapter, GlobalUtility
-from grokcore.security import Permission
 from dolmen.viewlet import ViewletManager, Viewlet
+
+from grokcore.component import Adapter, MultiAdapter, GlobalUtility
+from grokcore.component import adapter, implementer, baseclass, name
+from grokcore.security import Permission
+
+from z3c.table.column import Column, GetAttrColumn, LinkColumn
+from z3c.table.table import Table
 from zope.component import getMultiAdapter, getAdapters
+from zope.event import notify
 from zope.interface import Interface
 
-from .directives import viewletmanager
-from .utils import get_template, make_json_response
-from .interfaces import ISubMenu
-from z3c.table.table import Table
-from z3c.table.column import Column, GetAttrColumn, LinkColumn
-from dolmen.forms import crud
-from dolmen.forms.base import action
-from zope.event import notify
-import zope.lifecycleevent
-from cromlech.browser.exceptions import HTTPFound
-from cromlech.browser.interfaces import ITypedRequest
-from dolmen.request.decorators import request_type
-from cromlech.browser.exceptions import HTTPRedirect
-from cromlech.browser.utils import redirect_exception_response
 from .directives import layer
-from dolmen.template import TALTemplate
+from .directives import viewletmanager
+from .interfaces import ISubMenu
+from .utils import get_template, make_json_response, url as compute_url
 
 
 class Layout(Layout):
@@ -45,13 +51,16 @@ class View(BaseView):
     baseclass()
     responseFactory = Response
 
-    def url(self, obj):
-        return get_absolute_url(obj, self.request)
+    def url(self, obj, name=None, data=None):
+        return compute_url(self.request, obj, name, data)
 
     def application_url(self):
         return self.request.application_url
 
+    def flash(self, message, type=BASE_MESSAGE_TYPE):
+        return send(message, type=type)
 
+    
 class Page(View):
     baseclass()
     make_response = make_layout_response
@@ -105,17 +114,24 @@ class Form(Form):
 
     template = None
 
+    def url(self, obj, name=None, data=None):
+        return compute_url(self.request, obj, name, data)
+
     def application_url(self):
         return self.request.application_url
 
-    def flash(self, *args, **kwargs):
-        return
+    def flash(self, message, type=BASE_MESSAGE_TYPE):
+        return send(message, type=type)
 
     def namespace(self):
         namespace = super(Form, self).namespace()
         namespace['macro'] = self.FORM_MACROS.macros
         return namespace
 
+    def redirect(self, url, code=302):
+        exception = REDIRECTIONS[code]
+        raise exception(url)
+    
     def render(self):
         """Template is taken from the template attribute or searching
         for an adapter to ITemplate for entry and request
@@ -227,6 +243,7 @@ class TablePage(Table, Page):
 
 
 class LinkColumn(LinkColumn):
+    baseclass()
 
     def getLinkURL(self, item):
         """Setup link url."""

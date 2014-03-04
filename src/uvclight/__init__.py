@@ -3,7 +3,7 @@
 # cklinger@novareto.de
 
 from .components import ViewletManager, Viewlet
-from .utils import get_template, current_principal
+from .utils import get_template, current_principal, url
 
 from cromlech.browser import IPublicationRoot as IRootObject
 from dolmen.forms.base import SUCCESS, FAILURE, action, Action, Fields, Actions

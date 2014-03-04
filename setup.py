@@ -15,6 +15,7 @@ base_requires = [
     'dolmen.layout',
     'dolmen.location',
     'dolmen.menu',
+    'dolmen.message',
     'dolmen.request',
     'dolmen.tales',
     'dolmen.template',
