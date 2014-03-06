@@ -86,11 +86,10 @@ try:
             
         def valid_user(self, username, password):
             """Is this a valid username/password? (True or False)"""
-            pwd = self.users.get(username, None)
-            if pwd:
-                if pwd == password:
-                    notify(UserLoggedInEvent(Principal(username)))
-                    return True
+            account = self.users.get(username, None)
+            if account is not None and account.password == password:
+                notify(UserLoggedInEvent(Principal(username)))
+                return True
             return False
 
         def session_dict(self, environ):

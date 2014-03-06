@@ -25,6 +25,7 @@ from uvclight.components import (
     Column,
     GetAttrColumn,
     LinkColumn,
+    ContextualActionsMenu,
     DefaultView,
     DeleteForm,
     DisplayForm,
@@ -61,4 +62,5 @@ from uvclight.directives import (
     menu,
     schema,
     baseclass,
+    provides,
     )

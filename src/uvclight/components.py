@@ -36,9 +36,12 @@ from zope.component import getMultiAdapter, getAdapters
 from zope.event import notify
 from zope.interface import Interface
 
+from .directives import implements
 from .directives import layer
 from .directives import viewletmanager
-from .interfaces import ISubMenu
+from .directives import title 
+from dolmen.menu import menuentry
+from .interfaces import ISubMenu, IContextualActionsMenu
 from .utils import get_template, make_json_response, url as compute_url
 
 
@@ -150,8 +153,14 @@ def menu_template(context, request):
     return get_template('form.cpt', __file__)
 
 
+class ContextualActionsMenu(Menu):
+    implements(IContextualActionsMenu)
+    name('contextualactionsmenu')
+    baseclass()
+
 
 class AddForm(Form):
+    title(u'Erstellen')
     baseclass()
     _finishedAdd = False
 
@@ -189,23 +198,30 @@ class AddForm(Form):
         return super(AddForm, self).render()
 
 
+#@menuentry(IContextualActionsMenu)
 class EditForm(crud.Edit, Form):
+    title(u'Bearbeiten')
     baseclass()
 
 
+#@menuentry(ContextualActionsMenu)
 class DisplayForm(crud.Display, Form):
+    title(u'Anzeigen')
     baseclass()
 
 
+#@menuentry(ContextualActionsMenu)
 class DefaultView(DisplayForm):
     name('index')
+    title(u'Anzeigen')
     baseclass()
     responseFactory = Response
     make_response = make_layout_response
 
 
+#@menuentry(ContextualActionsMenu)
 class DeleteForm(crud.Delete, Form):
-    pass
+    title(u'Entfernen')
 
 
 class Table(Table):
