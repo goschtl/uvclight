@@ -4,6 +4,7 @@
 
 import json
 import urllib
+import xmlrpclib
 from os import path
 from dolmen.template import TALTemplate
 from zope.security.management import getInteraction
@@ -24,6 +25,11 @@ def make_json_response(view, result, name=None):
     response.write(json_result)
     response.headers['Content-Type'] = 'application/json'
     return response
+
+
+def make_xmlrpc_response(view, result, name=None):
+    return [xmlrpclib.dumps(tuple([result]),
+            view.response, name, view.encoding, view.allownone)]
 
 
 def current_principal():

@@ -4,8 +4,13 @@
 
 from zope.interface import Interface, implementer
 
+from cromlech.browser import IView
 from dolmen.menu.interfaces import IMenu
 from dolmen.viewlet.interfaces import IViewSlot
+
+
+class IXMLRPCView(IView):
+    pass
 
 
 #

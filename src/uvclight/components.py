@@ -11,6 +11,7 @@ from cromlech.browser.exceptions import REDIRECTIONS
 from cromlech.browser.interfaces import ITypedRequest
 from cromlech.browser.utils import redirect_exception_response
 from cromlech.webob.response import Response
+
 from dolmen.forms import crud
 from dolmen.forms.base import Form, Fields
 from dolmen.forms.base import action
@@ -39,10 +40,12 @@ from zope.interface import Interface
 from .directives import implements
 from .directives import layer
 from .directives import viewletmanager
-from .directives import title 
-from dolmen.menu import menuentry
+from .directives import title
+from .directives import order
+from dolmen.menu import menu
 from .interfaces import ISubMenu, IContextualActionsMenu
-from .utils import get_template, make_json_response, url as compute_url
+from .utils import make_xmlrpc_response, make_json_response
+from .utils import get_template, url as compute_url
 
 
 class Layout(Layout):
@@ -63,7 +66,11 @@ class View(BaseView):
     def flash(self, message, type=BASE_MESSAGE_TYPE):
         return send(message, type=type)
 
-    
+    def redirect(self, url, code=302):
+        exception = REDIRECTIONS[code]
+        raise exception(url)
+
+
 class Page(View):
     baseclass()
     make_response = make_layout_response
@@ -134,7 +141,7 @@ class Form(Form):
     def redirect(self, url, code=302):
         exception = REDIRECTIONS[code]
         raise exception(url)
-    
+
     def render(self):
         """Template is taken from the template attribute or searching
         for an adapter to ITemplate for entry and request
@@ -198,19 +205,23 @@ class AddForm(Form):
         return super(AddForm, self).render()
 
 
-#@menuentry(IContextualActionsMenu)
 class EditForm(crud.Edit, Form):
     title(u'Bearbeiten')
     baseclass()
 
 
-#@menuentry(ContextualActionsMenu)
+class EditMenuItem(MenuItem):
+    menu(IContextualActionsMenu)
+    title(u'Bearbeiten')
+    name('edit')
+    order(20)
+
+
 class DisplayForm(crud.Display, Form):
     title(u'Anzeigen')
     baseclass()
 
 
-#@menuentry(ContextualActionsMenu)
 class DefaultView(DisplayForm):
     name('index')
     title(u'Anzeigen')
@@ -219,9 +230,23 @@ class DefaultView(DisplayForm):
     make_response = make_layout_response
 
 
-#@menuentry(ContextualActionsMenu)
+class DisplayMenuItem(MenuItem):
+    menu(IContextualActionsMenu)
+    title(u'Anzeigen')
+    name('index')
+    order(10)
+
+
 class DeleteForm(crud.Delete, Form):
     title(u'Entfernen')
+    baseclass()
+
+
+class DeleteMenuItem(MenuItem):
+    menu(IContextualActionsMenu)
+    title('Entfernen')
+    name('delete')
+    order(30)
 
 
 class Table(Table):

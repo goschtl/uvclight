@@ -6,7 +6,7 @@ version = '0.1'
 base_requires = [
     'cromlech.browser',
     'cromlech.configuration',
-    'cromlech.dawnlight',
+    'cromlech.dawnlight >= 0.7',
     'cromlech.webob',
     'dolmen.content',
     'dolmen.forms.base',
@@ -29,6 +29,7 @@ base_requires = [
     'zope.i18n',
     'zope.interface',
     'zope.security',
+    'wsgi_xmlrpc',
     'Chameleon',
     ]
 

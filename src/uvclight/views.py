@@ -8,14 +8,16 @@ from .components import View, Page
 from .utils import get_template
 
 from dawnlight import ResolveError
-from grokcore.component import name, context, implements
+from grokcore.component import name, context
 from grokcore.security import require
+from cromlech.dawnlight import ITracebackAware
 from zope.dublincore.interfaces import IDCDescriptiveProperties
-from zope.location import locate, LocationProxy
+from zope.location import locate, Location
+from zope.interface import implementer
 
 
-class Error404(LocationProxy):
-    implements(IDCDescriptiveProperties)
+@implementer(IDCDescriptiveProperties)
+class Error404(Location):
 
     def __init__(self, context):
         self.context = context
@@ -30,6 +32,7 @@ class Error404(LocationProxy):
         return str(self.context)
 
 
+@implementer(ITracebackAware)
 class PageError404(Page):
     name('')
     context(ResolveError)
@@ -41,13 +44,12 @@ class PageError404(Page):
         self.context = Error404(context)
         self.request = request
 
-    def __call__(self, exc_info):
+    def set_exc_info(self, exc_info):
         self.traceback = ''.join(traceback.format_exception(*exc_info))
-        return View.__call__(self)
 
-        
-class Error500(LocationProxy):
-    implements(IDCDescriptiveProperties)
+
+@implementer(IDCDescriptiveProperties)
+class Error500(Location):
 
     def __init__(self, context):
         self.context = context
@@ -62,6 +64,7 @@ class Error500(LocationProxy):
         return str(self.context)
 
 
+@implementer(ITracebackAware)
 class PageError500(Page):
     name('')
     context(Exception)
@@ -73,6 +76,5 @@ class PageError500(Page):
         self.context = Error500(context)
         self.request = request
 
-    def __call__(self, exc_info):
+    def set_exc_info(self, exc_info):
         self.traceback = ''.join(traceback.format_exception(*exc_info))
-        return View.__call__(self)
