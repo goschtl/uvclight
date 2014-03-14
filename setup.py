@@ -4,6 +4,7 @@ import sys, os
 version = '0.1'
 
 base_requires = [
+    'Chameleon',
     'cromlech.browser',
     'cromlech.configuration',
     'cromlech.dawnlight >= 0.7',
@@ -24,13 +25,12 @@ base_requires = [
     'grokcore.component',
     'grokcore.security',
     'martian',
+    'uvc.design.canvas',
     'z3c.table',
     'zope.component',
     'zope.i18n',
     'zope.interface',
     'zope.security',
-    'wsgi_xmlrpc',
-    'Chameleon',
     ]
 
 auth_requires = [
