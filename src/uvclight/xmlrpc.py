@@ -16,7 +16,8 @@ def XMLRPCViewLookup(request, context, stack):
         raise RunetimeError("Couldn't resolve an XMLRPC View on %r" % obj)
     else:
         namespace, viewname = stack[0]
-        return getMultiAdapter((context, request), IXMLRPCView, name=viewname)
+        view = getMultiAdapter((context, request), IXMLRPCView, name=viewname)
+        return view, None
 
 
 def handle_xmplrpc_request(dispatcher, environ, start_response):
