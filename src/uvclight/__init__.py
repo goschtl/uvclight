@@ -25,7 +25,6 @@ from uvclight.components import (
     Column,
     GetAttrColumn,
     LinkColumn,
-    ContextualActionsMenu,
     DefaultView,
     DeleteForm,
     DisplayForm,

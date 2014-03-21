@@ -160,12 +160,6 @@ def menu_template(context, request):
     return get_template('form.cpt', __file__)
 
 
-class ContextualActionsMenu(Menu):
-    implements(IContextualActionsMenu)
-    name('contextualactionsmenu')
-    baseclass()
-
-
 class AddForm(Form):
     title(u'Erstellen')
     baseclass()

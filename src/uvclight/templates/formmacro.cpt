@@ -12,7 +12,7 @@
 
   <fieldset metal:define-macro="form-fieldset">
     <legend tal:condition="hasattr(view, 'legend')" tal:content="view.legend"> </legend>
-      <div id="extrainfo" tal:replace="structure provider: uvcsite.extrainfo"/>
+      <div id="extrainfo" tal:replace="structure provider: uvc-extrainfo"/>
     <div class="fields" tal:condition="view.fieldWidgets">
       <div class="control-group" tal:repeat="widget view.fieldWidgets" 
            tal:attributes="id 'field-' + widget.htmlId(); class widget.error and 'control-group error' or 'control-group'">
