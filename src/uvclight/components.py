@@ -276,6 +276,12 @@ class TablePage(Table, Page):
     def update(self):
         Table.update(self)
 
+    def render(self):
+        if self.template:
+            return self.template.render(
+                self, target_language=self.target_language, **self.namespace())
+        return self.renderTable()
+
 
 class LinkColumn(LinkColumn):
     baseclass()
