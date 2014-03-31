@@ -120,7 +120,6 @@ class Form(Form):
     responseFactory = Response
     make_response = make_layout_response
     dataValidators = [InvariantsValidation]
-    FORM_MACROS = get_template('formmacro.cpt')
 
     template = None
 
@@ -135,12 +134,16 @@ class Form(Form):
 
     def namespace(self):
         namespace = super(Form, self).namespace()
-        namespace['macro'] = self.FORM_MACROS.macros
+        namespace['macro'] = self.getTemplate().macros
         return namespace
 
     def redirect(self, url, code=302):
         exception = REDIRECTIONS[code]
         raise exception(url)
+
+    def getTemplate(self):
+        template = getMultiAdapter((self, self.request), ITemplate)
+        return template
 
     def render(self):
         """Template is taken from the template attribute or searching
@@ -155,7 +158,7 @@ class Form(Form):
 
 @adapter(IForm, Interface)
 @implementer(ITemplate)
-def menu_template(context, request):
+def form_template(context, request):
     """default template for the menu"""
     return get_template('form.cpt', __file__)
 
