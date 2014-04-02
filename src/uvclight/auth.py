@@ -3,22 +3,25 @@
 # cklinger@novareto.de
 
 try:
-    import string
+    from .components import View, Page
+    from .directives import context, name
+    from .utils import get_template
+    from .interfaces import UserLoggedInEvent
+
     from barrel import form
-    from dolmen.view import query_view_layout
-    from cromlech.browser import getSession, IView, IResponseFactory, ILayout
-    from cromlech.webob import Request, Response
-    from cromlech.security import Interaction
     from cromlech.browser import IPublicationRoot
-    from zope.event import notify
-    from uvclight.interfaces import UserLoggedInEvent
+    from cromlech.browser import getSession, IView, IResponseFactory, ILayout
+    from cromlech.security import Interaction
     from cromlech.security import Principal
-    from zope.location import Location
+    from cromlech.webob import Request, Response
+    from dolmen.view import query_view
     from zope.component import queryMultiAdapter
-    from zope.security.simplepolicies import ParanoidSecurityPolicy
-    from zope.security import canAccess
+    from zope.event import notify
     from zope.interface import Interface, implementer
+    from zope.location import Location
+    from zope.security import canAccess
     from zope.security.proxy import removeSecurityProxy
+    from zope.security.simplepolicies import ParanoidSecurityPolicy
 
 
     class Principal(Principal):
@@ -36,29 +39,6 @@ try:
         return queryMultiAdapter((request, authform), ILayout, name="")
 
 
-    default_template = """
-        <h1>Resource Requires Authentication</h1>
-        <form method="POST" action="">
-            <fieldset>
-                <legend>$message:</legend>
-                <label for="$user_field">Username:</label>
-                <input type="text"
-                    name="$user_field"
-                    id="$user_field"
-                    value="$username"/>
-                <br/>
-                <label for="$pass_field">Password:</label>
-                <input type="password" name="$pass_field" id="$pass_field"/>
-                <br/>
-                <button type="submit"
-                        name="$button"
-                        id="$button"
-                        value="submit">Sign In</button>
-            </fieldset>
-        </form>
-    """
-
-
     def logout(session=None):
         if session is None:
             session = getSession()
@@ -73,7 +53,6 @@ try:
         """
         """
         session_user_key = "user"
-        template = string.Template(default_template)
         __component_name__ = '/login'
         
         def __init__(self, users, realm):
@@ -100,30 +79,15 @@ try:
             pass
 
         def not_authenticated(self, environ, start_response):
-            """Respond to an unauthenticated request with a form."""
-            username = environ.get(self.environ_user_key, '')
-            if username:
-                message = self.failed_message
-            else:
-                message = self.first_message
-
-            html = self.template.safe_substitute(
-                user_field=self.user_field,
-                pass_field=self.pass_field,
-                button=self.button,
-                username=username,
-                message=message,
-                **environ)
-
+            """Respond to an unauthenticated request with a form.
+            """
             request = Request(environ)
-            namespace = {'context': self,
-                         'request': request,
-                         'view': self}
-            layout = get_layout(self, request)
+            view = query_view(request, self, name='login')
+            if view is None:
+                raise NotImplementedError
+        
             with Interaction():
-                result = layout(content=html, **namespace)
-                response = Response()
-                response.write(result)
+                response = view()
             return response(environ, start_response)
 
         def __call__(self, app):
@@ -133,6 +97,24 @@ try:
                     return app(environ, start_response)
                 return self.not_authenticated(environ, start_response)
             return security_traverser
+
+
+    class Login(Page):
+        context(Auth)
+        name('login')
+        template = get_template('login.cpt')
+
+        title = message = u"Please log in"
+        action = ""
+        
+        def update(self):
+            self.username = self.request.environment.get(
+                self.context.environ_user_key, '')
+
+            self.userfield = self.context.user_field
+            self.pwdfield = self.context.pass_field
+            self.button = self.context.button
+
 
     def secured(users, realm):
         """Decorator to secure my apps with.
