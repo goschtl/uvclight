@@ -9,6 +9,7 @@ try:
     from .interfaces import UserLoggedInEvent
 
     from barrel import form
+    from webob.exc import HTTPTemporaryRedirect
     from cromlech.browser import IPublicationRoot
     from cromlech.browser import getSession, IView, IResponseFactory, ILayout
     from cromlech.security import Interaction
@@ -39,29 +40,15 @@ try:
         return queryMultiAdapter((request, authform), ILayout, name="")
 
 
-    def logout(session=None):
-        if session is None:
-            session = getSession()
-        if 'REMOTE_USER' in session:
-            del session['REMOTE_USER']
-            return True
-        return False
-
-
-    @implementer(IPublicationRoot, IView, IResponseFactory)
+    @implementer(IPublicationRoot, IResponseFactory)
     class Auth(Location, form.FormAuth):
         """
         """
         session_user_key = "user"
-        __component_name__ = '/login'
         
         def __init__(self, users, realm):
             self.users = users
             self.realm = realm
-
-        @property
-        def context(self):
-            return self
             
         def valid_user(self, username, password):
             """Is this a valid username/password? (True or False)"""
@@ -97,6 +84,17 @@ try:
                     return app(environ, start_response)
                 return self.not_authenticated(environ, start_response)
             return security_traverser
+
+
+    def do_logout(global_conf, session_key):
+        def logout(environ, start_response):
+            session = environ[session_key].session
+            if session is not None:
+                if 'user' in session:
+                    del session['user']
+            response = HTTPTemporaryRedirect(location='/')
+            return response(environ, start_response)
+        return logout
 
 
     class Login(Page):
