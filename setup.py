@@ -9,7 +9,6 @@ base_requires = [
     'cromlech.configuration',
     'cromlech.dawnlight >= 0.7',
     'cromlech.webob',
-    'dolmen.content',
     'dolmen.forms.base',
     'dolmen.forms.crud',
     'dolmen.forms.ztk',
@@ -42,6 +41,7 @@ auth_requires = [
 zodb_requires = [
     'ZODB',
     'persistent',
+    'dolmen.content',
     'cromlech.zodb',
     ]
 

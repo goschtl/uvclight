@@ -1,5 +1,6 @@
 <configure
     xmlns="http://namespaces.zope.org/zope"
+    xmlns:zcml="http://namespaces.zope.org/zcml"
     xmlns:grok="http://namespaces.zope.org/grok">
 
   <include package="zope.i18n" />
@@ -12,7 +13,7 @@
   <include package="cromlech.dawnlight" file="consumers.zcml" />
 
   <include package="dolmen.request" />
-  <include package="dolmen.content" />
+  <include package="dolmen.content" zcml:condition="installed ZODB3" />
   <include package="dolmen.message" />
   <include package="dolmen.forms.base" />
   <include package="dolmen.forms.ztk"  />
