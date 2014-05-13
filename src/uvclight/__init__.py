@@ -2,6 +2,7 @@
 # Copyright (c) 2007-2011 NovaReto GmbH
 # cklinger@novareto.de
 
+from cromlech.browser import setSession, getSession
 from cromlech.browser import IPublicationRoot as IRootObject
 from dolmen.forms.base import SuccessMarker, SUCCESS, FAILURE
 from dolmen.forms.base import action, Action, Fields, Actions
