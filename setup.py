@@ -46,7 +46,9 @@ zodb_requires = [
     ]
 
 sql_requires = [
+    'SQLAlchemy',
     'cromlech.sqlalchemy',
+    'dolmen.sqlcontainer',
     ]
 
 mongo_requires = [

@@ -2,8 +2,6 @@
 # Copyright (c) 2007-2011 NovaReto GmbH
 # cklinger@novareto.de
 
-import zope.lifecycleevent
-
 from cromlech.browser import ITemplate
 from cromlech.browser.exceptions import HTTPFound
 from cromlech.browser.exceptions import HTTPRedirect
@@ -13,12 +11,15 @@ from cromlech.browser.utils import redirect_exception_response
 from cromlech.webob.response import Response
 
 from dolmen.forms import crud
-from dolmen.forms.base import Form, Fields
+from dolmen.forms.base import Form as BaseForm, Fields
 from dolmen.forms.base import action
 from dolmen.forms.base.interfaces import IForm
+from dolmen.forms.table import TableForm as BaseTableForm
 from dolmen.forms.ztk.validation import InvariantsValidation
-from dolmen.layout import Layout
+
+from dolmen.layout import Layout as BaseLayout
 from dolmen.location import get_absolute_url
+from dolmen.menu import menu
 from dolmen.menu import IMenu, Menu as BaseMenu, Entry as MenuItem
 from dolmen.message import BASE_MESSAGE_TYPE
 from dolmen.message.utils import send
@@ -32,29 +33,32 @@ from grokcore.component import adapter, implementer, baseclass, name
 from grokcore.security import Permission
 
 from z3c.table.column import Column, GetAttrColumn, LinkColumn
-from z3c.table.table import Table
+from z3c.table.table import Table as BaseTable
+
+import zope.lifecycleevent
 from zope.component import getMultiAdapter, getAdapters
 from zope.event import notify
 from zope.interface import Interface
 
-from .directives import implements
+from .directives import implements, context
 from .directives import layer
 from .directives import viewletmanager
 from .directives import title
 from .directives import order
-from dolmen.menu import menu
 from .interfaces import ISubMenu, IContextualActionsMenu
 from .utils import make_xmlrpc_response, make_json_response
 from .utils import get_template, url as compute_url
 
 
-class Layout(Layout):
+class Layout(BaseLayout):
     baseclass()
+    context(Interface)
     responseFactory = Response
 
 
 class View(BaseView):
     baseclass()
+    context(Interface)
     responseFactory = Response
 
     def url(self, obj, name=None, data=None):
@@ -105,6 +109,7 @@ class Menu(BaseMenu):
 
 class SubMenu(Menu):
     baseclass()
+    context(Interface)
     viewletmanager(IMenu)
 
     def __init__(self, context, request, view, parentmenu=None):
@@ -115,8 +120,9 @@ class SubMenu(Menu):
         BaseMenu.update(self)
 
 
-class Form(Form):
+class Form(BaseForm):
     baseclass()
+    context(Interface)
     responseFactory = Response
     make_response = make_layout_response
     dataValidators = [InvariantsValidation]
@@ -246,7 +252,7 @@ class DeleteMenuItem(MenuItem):
     order(30)
 
 
-class Table(Table):
+class Table(BaseTable):
 
     def getBatchSize(self):
         return int(self.request.form.get(self.prefix + '-batchSize',
@@ -268,14 +274,16 @@ class Table(Table):
 
 class TableView(Table, View):
     baseclass()
-
+    context(Interface)
+    
     def update(self):
         Table.update(self)
 
 
 class TablePage(Table, Page):
     baseclass()
-
+    context(Interface)
+    
     def update(self):
         Table.update(self)
 
@@ -292,7 +300,8 @@ class LinkColumn(LinkColumn):
     def getLinkURL(self, item):
         """Setup link url."""
         if self.linkName is not None:
-            return '%s/%s' % (get_absolute_url(item, self.request), self.linkName)
+            return '%s/%s' % (
+                get_absolute_url(item, self.request), self.linkName)
         return get_absolute_url(item, self.request)
 
 
@@ -330,3 +339,9 @@ class REST(View):
         raise MethodNotAllowed(self.context, self.request)
 
 
+class TableForm(BaseTableForm):
+    baseclass()
+    context(Interface)
+
+    responseFactory = Response
+    make_response = make_layout_response
