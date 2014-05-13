@@ -69,3 +69,11 @@ from .directives import (
     view,
     viewletmanager,
     )
+
+from .security import (
+    IUnauthenticatedPrincipal,
+    Interaction,
+    Participation,
+    Principal,
+    unauthenticated_principal,
+    )

@@ -8,6 +8,7 @@ base_requires = [
     'cromlech.browser',
     'cromlech.configuration',
     'cromlech.dawnlight >= 0.7',
+    'cromlech.security',
     'cromlech.webob',
     'dolmen.forms.base',
     'dolmen.forms.crud',
