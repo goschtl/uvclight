@@ -48,6 +48,7 @@ from .components import (
     SubMenu,
     TablePage,
     TableView,
+    TableForm,
     View,
     Viewlet,
     ViewletManager,

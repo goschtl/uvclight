@@ -275,7 +275,7 @@ class Table(BaseTable):
 class TableView(Table, View):
     baseclass()
     context(Interface)
-    
+
     def update(self):
         Table.update(self)
 
@@ -283,7 +283,7 @@ class TableView(Table, View):
 class TablePage(Table, Page):
     baseclass()
     context(Interface)
-    
+
     def update(self):
         Table.update(self)
 
