@@ -31,12 +31,12 @@
           <label class="field-label" for="#"
                  tal:attributes="for widget.htmlId()"
                  tal:content="widget.title"
-                 tal:condition="widget.visible">
+                 tal:condition="widget.isVisible()">
             Label
           </label>
           <span class="field-required"
                 i18n:translate=""
-                tal:condition="widget.required and widget.visible"
+                tal:condition="widget.required and widget.isVisible()"
                 >(required)</span>
           <br />
           <tal:description tal:condition="widget.description">
