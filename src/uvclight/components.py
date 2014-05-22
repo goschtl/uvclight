@@ -13,7 +13,8 @@ from cromlech.webob.response import Response
 from dolmen.forms import crud
 from dolmen.forms.base import Form as BaseForm, Fields
 from dolmen.forms.base import action
-from dolmen.forms.base.interfaces import IForm
+from dolmen.forms.base.markers import HiddenMarker
+from dolmen.forms.base.interfaces import IForm, IModeMarker
 from dolmen.forms.table import TableForm as BaseTableForm
 from dolmen.forms.ztk.validation import InvariantsValidation
 
@@ -159,6 +160,10 @@ class Form(BaseForm):
         exception = REDIRECTIONS[code]
         raise exception(url)
 
+    def isHidden(self, widget):
+        mode = widget.component.mode
+        return IModeMarker.providedBy(mode) and isinstance(HiddenMarker, mode)
+    
     def getTemplate(self):
         template = getMultiAdapter((self, self.request), ITemplate)
         return template
