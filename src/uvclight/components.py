@@ -37,7 +37,6 @@ from z3c.table.column import Column, GetAttrColumn, LinkColumn
 from z3c.table.table import Table as BaseTable
 
 import zope.lifecycleevent
-from zope.i18n import translate
 from zope.component import getMultiAdapter, getAdapters
 from zope.event import notify
 from zope.interface import Interface
@@ -57,11 +56,6 @@ class Layout(BaseLayout):
     context(Interface)
     responseFactory = Response
 
-    def namespace(self, **kwargs):
-        namespace = super(Layout, self).namespace(**kwargs)
-        namespace['translate'] = translate
-        return namespace
-    
 
 class View(BaseView):
     baseclass()
@@ -70,11 +64,6 @@ class View(BaseView):
 
     def url(self, obj, name=None, data=None):
         return compute_url(self.request, obj, name, data)
-
-    def namespace(self):
-        namespace = super(View, self).namespace()
-        namespace['translate'] = translate
-        return namespace
 
     def application_url(self):
         return self.request.application_url
@@ -153,7 +142,6 @@ class Form(BaseForm):
     def namespace(self):
         namespace = super(Form, self).namespace()
         namespace['macro'] = self.getTemplate().macros
-        namespace['translate'] = translate
         return namespace
 
     def redirect(self, url, code=302):

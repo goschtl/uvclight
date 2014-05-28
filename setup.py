@@ -20,7 +20,7 @@ base_requires = [
     'dolmen.message',
     'dolmen.request',
     'dolmen.tales',
-    'dolmen.template',
+    'dolmen.template[translate] >= 0.3.3',
     'dolmen.view[security]',
     'dolmen.viewlet',
     'grokcore.component',
