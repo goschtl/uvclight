@@ -13,6 +13,7 @@ base_requires = [
     'dolmen.forms.base',
     'dolmen.forms.crud',
     'dolmen.forms.ztk',
+    'dolmen.forms.table',
     'dolmen.layout',
     'dolmen.location',
     'dolmen.menu',
