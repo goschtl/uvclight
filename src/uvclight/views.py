@@ -14,6 +14,21 @@ from cromlech.dawnlight import ITracebackAware
 from zope.dublincore.interfaces import IDCDescriptiveProperties
 from zope.location import locate, Location
 from zope.interface import implementer
+from dolmen.view.components import query_view_layout
+
+
+def make_error_layout_response(view, result, name=None):
+    if name is None:
+        name = getattr(view, 'layoutName', "")
+    layout = query_view_layout(view, name=name)
+    if layout is not None:
+        wrapped = layout(result, **{'view': view})
+        response = view.responseFactory()
+        response.write(wrapped or u'')
+    else:
+        response = view.responseFactory()
+        response.write(result or u'')
+    return response
 
 
 @implementer(IDCDescriptiveProperties)
@@ -37,6 +52,7 @@ class PageError404(Page):
     name('')
     context(ResolveError)
     require('zope.Public')
+    make_response = make_error_layout_response
 
     template = get_template('404.cpt')
 
@@ -69,6 +85,7 @@ class PageError500(Page):
     name('')
     context(Exception)
     require('zope.Public')
+    make_response = make_error_layout_response
 
     template = get_template('500.cpt')
 
