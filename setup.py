@@ -8,18 +8,20 @@ base_requires = [
     'cromlech.browser',
     'cromlech.configuration',
     'cromlech.dawnlight >= 0.7',
+    'cromlech.security',
     'cromlech.webob',
     'cromlech.wsgistate',
     'dolmen.forms.base',
     'dolmen.forms.crud',
     'dolmen.forms.ztk',
+    'dolmen.forms.table',
     'dolmen.layout',
     'dolmen.location',
     'dolmen.menu',
     'dolmen.message',
     'dolmen.request',
     'dolmen.tales',
-    'dolmen.template',
+    'dolmen.template[translate] >= 0.3.3',
     'dolmen.view[security]',
     'dolmen.viewlet',
     'grokcore.component',
@@ -48,7 +50,9 @@ zodb_requires = [
 
 sql_requires = [
     'transaction',
+    'SQLAlchemy',
     'cromlech.sqlalchemy',
+    'dolmen.sqlcontainer',
     ]
 
 mongo_requires = [
