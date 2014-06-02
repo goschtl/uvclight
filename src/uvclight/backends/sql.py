@@ -1,6 +1,6 @@
 try:
     import transaction
-    from cromlech.sqlalchemy import SQLAlchemySessio
+    from cromlech.sqlalchemy import SQLAlchemySession
     from cromlech.sqlalchemy import create_and_register_engine, create_engine
     from dolmen.sqlcontainer import SQLContainer
     
@@ -14,4 +14,5 @@ try:
         return sql_wrapped
 
 except ImportError:
+    raise
     print "SQL capabilities don't seem to be activated"
