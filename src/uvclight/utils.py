@@ -10,6 +10,7 @@ from dolmen.template import TALTemplate
 from zope.security.management import getInteraction
 from dolmen.location import get_absolute_url
 
+
 TEMPLATES_DIR = path.join(path.dirname(__file__), 'templates')
 
 

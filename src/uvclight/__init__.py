@@ -14,6 +14,11 @@ from dolmen.menu import menuentry
 from zope.component.hooks import getSite
 
 
+from uvclight.session import (
+    sessionned,
+    )
+
+
 from uvclight.interfaces import (
     IContextualActionsMenu,
     )
@@ -47,19 +52,21 @@ from uvclight.components import (
     View,
     )
 
+
 from uvclight.directives import (
-    order,
+    adapts,
+    baseclass,
     context,
     implementer,
     implements,
     layer,
+    menu,
     name,
+    order,
+    provides,
     require,
+    schema,
     title,
     view,
     viewletmanager,
-    menu,
-    schema,
-    baseclass,
-    provides,
     )

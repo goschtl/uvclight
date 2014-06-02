@@ -9,6 +9,7 @@ base_requires = [
     'cromlech.configuration',
     'cromlech.dawnlight >= 0.7',
     'cromlech.webob',
+    'cromlech.wsgistate',
     'dolmen.forms.base',
     'dolmen.forms.crud',
     'dolmen.forms.ztk',
@@ -46,6 +47,7 @@ zodb_requires = [
     ]
 
 sql_requires = [
+    'transaction',
     'cromlech.sqlalchemy',
     ]
 
