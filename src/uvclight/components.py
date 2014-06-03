@@ -39,16 +39,20 @@ from z3c.table.table import Table as BaseTable
 import zope.lifecycleevent
 from zope.component import getMultiAdapter, getAdapters
 from zope.event import notify
-from zope.interface import Interface
+from zope.interface import Interface, implements
 
-from .directives import implements, context
-from .directives import layer
+from .directives import implements, context, schema
+from .directives import layer, title, order
 from .directives import viewletmanager
-from .directives import title
-from .directives import order
 from .interfaces import ISubMenu, IContextualActionsMenu
+from .interfaces import IContent, IDescriptiveSchema
 from .utils import make_xmlrpc_response, make_json_response
 from .utils import get_template, url as compute_url
+
+
+class Content(object):
+    implements(IContent)
+    schema(IDescriptiveSchema)
 
 
 class Layout(BaseLayout):

@@ -25,6 +25,8 @@ from .utils import (
 
 from .interfaces import (
     IContextualActionsMenu,
+    IContent,
+    IDescriptiveSchema,
     )
 
 from .components import (
@@ -75,6 +77,7 @@ from uvclight.directives import (
     traversable,
     view,
     viewletmanager,
+    schema,
     )
 
 from .security import (

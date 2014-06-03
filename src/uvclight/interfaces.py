@@ -5,6 +5,7 @@
 from zope.interface import Interface, implementer
 from cromlech.browser import IView
 from uvc.design.canvas import *
+from uvc.content import IContent, IDescriptiveSchema
 
 
 class IXMLRPCView(IView):

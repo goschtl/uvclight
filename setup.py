@@ -13,8 +13,8 @@ base_requires = [
     'cromlech.wsgistate',
     'dolmen.forms.base',
     'dolmen.forms.crud',
-    'dolmen.forms.ztk',
     'dolmen.forms.table',
+    'dolmen.forms.ztk',
     'dolmen.layout',
     'dolmen.location',
     'dolmen.menu',
@@ -27,6 +27,7 @@ base_requires = [
     'grokcore.component',
     'grokcore.security',
     'martian',
+    'uvc.content',
     'uvc.design.canvas',
     'z3c.table',
     'zope.component',
@@ -44,7 +45,6 @@ auth_requires = [
 zodb_requires = [
     'ZODB',
     'persistent',
-    'dolmen.content',
     'cromlech.zodb',
     ]
 

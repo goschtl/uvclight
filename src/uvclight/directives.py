@@ -10,10 +10,4 @@ from grokcore.component import order, title, implements, provides, adapts
 from grokcore.security import require
 from zope.interface import implements, implementer
 from dolmen.menu import menu
-
-try:
-    from dolmen.content import schema
-except ImportError:
-    print "`schema` directive is available only with the zodb extra. This is a `dolmen.content` limitation."
-    def schema(*args, **kwargs):
-        raise NotImplementedError
+from uvc.content import schema
