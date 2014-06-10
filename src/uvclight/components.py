@@ -51,6 +51,13 @@ from .utils import get_template, url as compute_url
 
 
 class Content(object):
+    """Base Content.
+
+    .. note::
+
+       Some note. Just for test now.
+
+    """
     implements(IContent)
     schema(IDescriptiveSchema)
 
@@ -67,6 +74,19 @@ class View(BaseView):
     responseFactory = Response
 
     def url(self, obj, name=None, data=None):
+        """This function does something.
+
+        Args:
+            obj (object):  The ILocation providing object.
+
+        Kwargs:
+            name (str): .
+            data (dict): .
+
+        Returns:
+            str.
+
+        """
         return compute_url(self.request, obj, name, data)
 
     def application_url(self):
@@ -180,7 +200,7 @@ def form_template(context, request):
 
 class AddForm(Form):
     title(u'Erstellen')
-    baseclass()
+    #baseclass()
     _finishedAdd = False
 
     @action(u'Speichern', identifier="uvcsite.add")
