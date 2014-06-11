@@ -34,10 +34,12 @@ UVCLight : Detailled API
 :mod:`uvclight.components`
 ==========================
 
-.. automodule:: uvclight.components
-    :members:
-    :undoc-members:
-    :show-inheritance:
+.. autogrok:: uvclight.components.Layout
+
+.. autogrok:: uvclight.components.View
+
+.. autogrok:: uvclight.components.Content
+
 
 
 :mod:`uvclight.interfaces`
