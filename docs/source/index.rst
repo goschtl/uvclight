@@ -1,5 +1,17 @@
-Novareto API : UVCLight
-***********************
+UVCLight : Examples
+*******************
+
+Site
+====
+
+.. literalinclude:: ../../src/uvclight/tests/examples/app.py
+   :language: python
+   :pyobject: Site
+
+
+
+UVCLight : Detailled API
+************************
 
 :mod:`uvclight`
 ===============
