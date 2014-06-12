@@ -63,6 +63,12 @@ traject_requires = [
     'traject',
     ]
 
+websocket_requires = [
+    'uwsgi',
+    'gevent',
+    'Flask-uWSGI-WebSocket',
+    ]
+
 tests_require = [
     'zope.location',
     'zope.event',
@@ -99,6 +105,7 @@ setup(
         'test': tests_require,
         'traject': traject_requires,
         'zodb': zodb_requires,
+        'websocket': websocket_requires,
         },
     entry_points="""
       # -*- Entry points: -*-
