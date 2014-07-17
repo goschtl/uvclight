@@ -39,6 +39,9 @@ from .components import (
     EditForm,
     Fields,
     Form,
+    Form as GroupForm, # FIXME
+    Form as SubForm, # FIXME
+    Form as Wizard, # FIXME
     GetAttrColumn,
     GlobalUtility,
     Index,
@@ -64,6 +67,7 @@ from uvclight.directives import (
     adapts,
     baseclass,
     context,
+    description,
     implementer,
     implements,
     layer,
