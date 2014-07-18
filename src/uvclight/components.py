@@ -17,6 +17,7 @@ from dolmen.forms.base.markers import HiddenMarker
 from dolmen.forms.base.interfaces import IForm, IModeMarker
 from dolmen.forms.table import TableForm as BaseTableForm
 from dolmen.forms.ztk.validation import InvariantsValidation
+from dolmen.forms.composed import ComposedForm, SubForm
 
 from dolmen.layout import Layout as BaseLayout
 from dolmen.location import get_absolute_url
@@ -41,6 +42,8 @@ from zope.component import getMultiAdapter, getAdapters
 from zope.event import notify
 from zope.interface import Interface, implements
 
+from uvc.content import schematic_bootstrap
+
 from .directives import implements, context, schema
 from .directives import layer, title, order
 from .directives import viewletmanager
@@ -51,17 +54,13 @@ from .utils import get_template, url as compute_url
 
 
 class Content(object):
-    """Base Content.
-
-    .. note::
-
-       Some note. Just for test now.
-
+    """Base Content
     """
     implements(IContent)
     schema(IDescriptiveSchema)
+    __init__ = schematic_bootstrap
 
-
+    
 class Layout(BaseLayout):
     baseclass()
     context(Interface)

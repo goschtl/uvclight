@@ -33,15 +33,17 @@ from .components import (
     Adapter,
     AddForm,
     Column,
+    Content,
     DefaultView,
     DeleteForm,
     DisplayForm,
     EditForm,
     Fields,
     Form,
-    Form as GroupForm, # FIXME
-    Form as SubForm, # FIXME
+    ComposedForm,
+    SubForm,
     Form as Wizard, # FIXME
+    Form as Step, # FIXME
     GetAttrColumn,
     GlobalUtility,
     Index,
@@ -73,6 +75,7 @@ from uvclight.directives import (
     layer,
     menu,
     name,
+    form,
     order,
     provides,
     require,
