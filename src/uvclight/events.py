@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 
 from zope.interface import implementer, Interface
-from zope.interface.interfaces import ObjectEvent
+from zope.component.interfaces import ObjectEvent, IObjectEvent
 
 
-class IApplicationInitializedEvent(Interface):
+class IApplicationInitializedEvent(IObjectEvent):
     pass
 
 
