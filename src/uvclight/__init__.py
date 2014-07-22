@@ -17,6 +17,15 @@ from .session import (
     sessionned,
     )
 
+from .http import (
+    setRequest,
+    getRequest,
+    )
+
+from .context import (
+    Request,
+    )
+
 from .utils import (
     get_template,
     current_principal,
