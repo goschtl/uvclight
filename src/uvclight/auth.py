@@ -6,7 +6,7 @@ try:
     from .components import Page
     from .directives import context, name
     from .utils import get_template
-    from .interfaces import UserLoggedInEvent
+    from .events import UserLoggedInEvent
 
     from barrel import form
     from webob.exc import HTTPTemporaryRedirect
@@ -146,4 +146,3 @@ try:
 
 except ImportError:
     print "The Auth Module was not Loaded"
-
