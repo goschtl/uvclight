@@ -1,7 +1,8 @@
-import uuid
+# -*- coding: utf-8 -*-
+
 import uwsgi
 
-from gevent import killall, sleep, spawn, wait
+from gevent import spawn, wait
 from gevent.event import Event
 from gevent.queue import Queue
 from gevent.select import select

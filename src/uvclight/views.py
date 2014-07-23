@@ -4,7 +4,7 @@
 
 import traceback
 
-from .components import View, Page
+from .components import Page
 from .utils import get_template
 
 from dawnlight import ResolveError

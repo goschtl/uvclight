@@ -3,7 +3,7 @@
 # cklinger@novareto.de
 
 try:
-    from .components import View, Page
+    from .components import Page
     from .directives import context, name
     from .utils import get_template
     from .interfaces import UserLoggedInEvent
@@ -11,14 +11,14 @@ try:
     from barrel import form
     from webob.exc import HTTPTemporaryRedirect
     from cromlech.browser import IPublicationRoot
-    from cromlech.browser import getSession, IView, IResponseFactory, ILayout
+    from cromlech.browser import getSession, IResponseFactory, ILayout
     from cromlech.security import Interaction
     from cromlech.security import Principal
-    from cromlech.webob import Request, Response
+    from cromlech.webob import Request
     from dolmen.view import query_view
     from zope.component import queryMultiAdapter
     from zope.event import notify
-    from zope.interface import Interface, implementer
+    from zope.interface import implementer
     from zope.location import Location
     from zope.security import canAccess
     from zope.security.proxy import removeSecurityProxy

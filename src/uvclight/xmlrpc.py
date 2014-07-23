@@ -13,7 +13,7 @@ def XMLRPCViewLookup(request, context, stack):
     if size == 0:
         raise RuntimeError('No XMLRPC view by default')
     elif size > 1:
-        raise RunetimeError("Couldn't resolve an XMLRPC View on %r" % obj)
+        raise RuntimeError("Couldn't resolve an XMLRPC View on %r" % context)
     else:
         namespace, viewname = stack[0]
         view = getMultiAdapter((context, request), IXMLRPCView, name=viewname)
@@ -24,9 +24,6 @@ def handle_xmplrpc_request(dispatcher, environ, start_response):
     try:
         length = int(environ['CONTENT_LENGTH'])
         data = environ['wsgi.input'].read(length)
-           
-        max_chunk_size = 10 * 1024 * 1024
-        size_remaining = length
         response = dispatcher._marshaled_dispatch(
             data, getattr(dispatcher, '_dispatch', None))
         response += '\n'

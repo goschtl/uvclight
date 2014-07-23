@@ -4,7 +4,7 @@ from .http import setRequest
 from cromlech import webob
 
 
-class Request(object):
+class ContextualRequest(object):
 
     def __init__(self, environ, factory=webob.Request):
         self.environ = environ

@@ -9,7 +9,7 @@ from os import path
 from dolmen.template import TALTemplate
 from zope.security.management import getInteraction
 from dolmen.location import get_absolute_url
-
+from cromlech.configuration.utils import load_zcml
 
 TEMPLATES_DIR = path.join(path.dirname(__file__), 'templates')
 

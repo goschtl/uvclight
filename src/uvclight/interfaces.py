@@ -6,19 +6,12 @@ from zope.interface import Interface, implementer
 from cromlech.browser import IView
 from uvc.design.canvas import *
 from uvc.content import IContent, IDescriptiveSchema
+from cromlech.browser import IPublicationRoot
 
 
 class IXMLRPCView(IView):
     pass
 
 
-class IUserLoggedInEvent(Interface):
-    """ """
-
-
-@implementer(IUserLoggedInEvent)
-class UserLoggedInEvent(object):
-
-    def __init__(self, principal):
-        self.principal = principal
-
+class IApplication(IPublicationRoot):
+    pass
