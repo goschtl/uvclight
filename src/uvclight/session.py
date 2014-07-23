@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from cromlech.wsgistate import WsgistateSession
 
 
