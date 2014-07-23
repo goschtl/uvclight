@@ -81,6 +81,7 @@ from .components import (
     Form as Step, # FIXME
     GetAttrColumn,
     GlobalUtility,
+    global_utility,
     Index,
     JSON,
     Layout,

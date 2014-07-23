@@ -32,6 +32,7 @@ from dolmen.viewlet import ViewletManager, Viewlet
 
 from grokcore.component import Adapter, MultiAdapter, GlobalUtility
 from grokcore.component import adapter, implementer, baseclass, name
+from grokcore.component import global_utility
 from grokcore.security import Permission
 
 from z3c.table.column import Column, GetAttrColumn, LinkColumn
