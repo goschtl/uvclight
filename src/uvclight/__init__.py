@@ -103,6 +103,7 @@ from .components import (
 
 from uvclight.directives import (
     adapts,
+    adapter,
     baseclass,
     context,
     description,
