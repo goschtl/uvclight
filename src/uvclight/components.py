@@ -2,12 +2,17 @@
 # Copyright (c) 2007-2011 NovaReto GmbH
 # cklinger@novareto.de
 
+from unidecode import unidecode
+
 from cromlech.browser import ITemplate
 from cromlech.browser.exceptions import HTTPFound
 from cromlech.browser.exceptions import HTTPRedirect
 from cromlech.browser.exceptions import REDIRECTIONS
 from cromlech.browser.interfaces import ITypedRequest
 from cromlech.browser.utils import redirect_exception_response
+from cromlech.container.components import Container as BaseContainer
+from cromlech.container.contained import Contained
+from cromlech.container.interfaces import IContainer, INameChooser
 from cromlech.webob.response import Response
 
 from dolmen.forms import crud
@@ -42,6 +47,7 @@ import zope.lifecycleevent
 from zope.component import getMultiAdapter, getAdapters
 from zope.event import notify
 from zope.interface import Interface, implements
+from zope.dublincore.interfaces import IDCDescriptiveProperties
 
 from uvc.content import schematic_bootstrap
 
@@ -54,13 +60,21 @@ from .utils import make_xmlrpc_response, make_json_response
 from .utils import get_template, url as compute_url
 
 
-class Content(object):
+class Content(Contained):
     """Base Content
     """
-    implements(IContent)
     schema(IDescriptiveSchema)
+    implements(IContent)
     __init__ = schematic_bootstrap
 
+
+class Container(BaseContainer):
+    """Base Container
+    """
+    implements(IContent, IContainer)
+    schema(IDescriptiveSchema)
+    __init__ = schematic_bootstrap
+    
     
 class Layout(BaseLayout):
     baseclass()
@@ -374,3 +388,42 @@ class TableForm(BaseTableForm):
 
     responseFactory = Response
     make_response = make_layout_response
+
+
+class NormalizingNamechooser(Adapter):
+    implements(INameChooser)
+    context(IContainer)
+
+    retries = 100
+
+    def __init__(self, context):
+        self.context = context
+
+    def checkName(self, name, object):
+        return not name in self.context
+
+    def _findUniqueName(self, name, object):
+        if not name in self.context:
+            return name
+
+        idx = 1
+        while idx <= self.retries:
+            new_name = "%s_%d" % (name, idx)
+            if not new_name in self.context:
+                return new_name
+            idx += 1
+
+        raise ValueError(
+            "Cannot find a unique name based on "
+            "`%s` after %d attempts." % (name, self.retries))
+
+    def chooseName(self, name, object):
+        if not name:
+            dc = IDCDescriptiveProperties(object, None)
+            if dc is not None and dc.title:
+                name = dc.title.strip()
+                name = unidecode(name).strip().replace(' ', '_').lower()
+            else:
+                name = object.__class__.__name__.lower()
+
+        return self._findUniqueName(name, object)

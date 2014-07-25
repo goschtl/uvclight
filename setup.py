@@ -4,6 +4,7 @@ import sys, os
 version = '0.1'
 
 base_requires = [
+    'unidecode',
     'Chameleon',
     'cromlech.browser',
     'cromlech.configuration',
