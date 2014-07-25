@@ -81,6 +81,8 @@ from .components import (
     Form as Wizard, # FIXME
     Form as Step, # FIXME
     GetAttrColumn,
+    CheckBoxColumn,
+    ModifiedColumn,
     GlobalUtility,
     global_utility,
     Index,

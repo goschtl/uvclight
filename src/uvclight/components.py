@@ -41,6 +41,7 @@ from grokcore.component import global_utility
 from grokcore.security import Permission
 
 from z3c.table.column import Column, GetAttrColumn, LinkColumn
+from z3c.table.column import ModifiedColumn, CheckBoxColumn
 from z3c.table.table import Table as BaseTable
 
 import zope.lifecycleevent
@@ -347,6 +348,24 @@ class LinkColumn(LinkColumn):
                 get_absolute_url(item, self.request), self.linkName)
         return get_absolute_url(item, self.request)
 
+
+
+class CheckBoxColumn(CheckBoxColumn):
+    baseclass()
+    
+    def isSelected(self, item):
+        v = self.request.form.get(self.getItemKey(item), [])
+        if not isinstance(v, list):
+            # ensure that we have a list which prevents to compare strings
+            v = [v]
+        if self.getItemValue(item) in v:
+            return True
+        return False
+    
+
+class ModifiedColumn(ModifiedColumn):
+    baseclass()
+    
 
 @request_type('rest')
 class IRESTRequest(ITypedRequest):
