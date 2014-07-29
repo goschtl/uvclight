@@ -78,6 +78,8 @@ from .components import (
     Form,
     ComposedForm,
     SubForm,
+    ViewletForm,
+    ViewletManagerForm,
     Form as Wizard, # FIXME
     Form as Step, # FIXME
     GetAttrColumn,

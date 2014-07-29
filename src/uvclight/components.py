@@ -34,6 +34,7 @@ from dolmen.request.decorators import request_type
 from dolmen.template import TALTemplate
 from dolmen.view import View as BaseView, make_layout_response
 from dolmen.viewlet import ViewletManager, Viewlet
+from dolmen.forms.viewlet import ViewletForm, ViewletManagerForm
 
 from grokcore.component import Adapter, MultiAdapter, GlobalUtility
 from grokcore.component import adapter, implementer, baseclass, name
