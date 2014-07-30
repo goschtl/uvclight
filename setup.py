@@ -11,6 +11,7 @@ base_requires = [
     'cromlech.dawnlight >= 0.7',
     'cromlech.security',
     'cromlech.webob',
+    'cromlech.container',
     'cromlech.wsgistate',
     'dolmen.forms.base',
     'dolmen.forms.crud',

@@ -17,8 +17,8 @@
   <include package="dolmen.message" />
   <include package="dolmen.forms.base" />
   <include package="dolmen.forms.ztk"  />
+  <include package="dolmen.forms.viewlet"  />
   <include package="dolmen.menu" />
-  <include package="dolmen.forms.ztk" />
 
   <include package="dolmen.layout" file="meta.zcml" />
   <include package="dolmen.view" file="meta.zcml" />
