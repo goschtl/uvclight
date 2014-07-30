@@ -12,7 +12,9 @@ try:
     from webob.exc import HTTPTemporaryRedirect
     from cromlech.browser import IPublicationRoot
     from cromlech.browser import getSession, IResponseFactory, ILayout
-    from cromlech.security import Interaction
+    from cromlech.browser import exceptions
+    from cromlech.security import Interaction, unauthenticated_principal
+    from zope.security.management import getInteraction
     from cromlech.security import Principal
     from cromlech.webob import Request
     from dolmen.view import query_view
@@ -139,10 +141,18 @@ try:
         def check(*args, **kwargs):
             component = lookup(*args, **kwargs)
             if component is not None:
-                assert canAccess(component, '__call__')   # or raise
-                return removeSecurityProxy(component)
+                if canAccess(component, '__call__'):
+                    return removeSecurityProxy(component)
+                else:
+                    interaction = getInteraction()
+                    principal = interaction.participations[0].principal
+                    if principal is unauthenticated_principal:
+                        raise exceptions.HTTPUnauthorized(component)
+                    else:
+                        raise exceptions.HTTPForbidden(component)
             return None
         return check
 
 except ImportError:
-    print "The Auth Module was not Loaded"
+    #print "The Auth Module was not Loaded"
+    raise
