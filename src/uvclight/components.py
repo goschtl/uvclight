@@ -76,8 +76,8 @@ class Container(BaseContainer):
     implements(IContent, IContainer)
     schema(IDescriptiveSchema)
     __init__ = schematic_bootstrap
-    
-    
+
+
 class Layout(BaseLayout):
     baseclass()
     context(Interface)
@@ -191,7 +191,7 @@ class Form(BaseForm):
     def isHidden(self, widget):
         mode = widget.component.mode
         return IModeMarker.providedBy(mode) and isinstance(HiddenMarker, mode)
-    
+
     def getTemplate(self):
         template = getMultiAdapter((self, self.request), ITemplate)
         return template
@@ -205,6 +205,20 @@ class Form(BaseForm):
             template = getMultiAdapter((self, self.request), ITemplate)
         return template.render(
             self, target_language=self.target_language, **self.namespace())
+
+
+class ViewletForm(ViewletForm):
+    baseclass()
+
+    def namespace(self):
+        namespace = super(ViewletForm, self).namespace()
+        namespace['macro'] = self.getTemplate().macros
+        import pdb; pdb.set_trace()
+        return namespace
+
+    def getTemplate(self):
+        template = getMultiAdapter((self, self.request), ITemplate)
+        return template
 
 
 @adapter(IForm, Interface)
@@ -353,7 +367,7 @@ class LinkColumn(LinkColumn):
 
 class CheckBoxColumn(CheckBoxColumn):
     baseclass()
-    
+
     def isSelected(self, item):
         v = self.request.form.get(self.getItemKey(item), [])
         if not isinstance(v, list):
@@ -362,11 +376,11 @@ class CheckBoxColumn(CheckBoxColumn):
         if self.getItemValue(item) in v:
             return True
         return False
-    
+
 
 class ModifiedColumn(ModifiedColumn):
     baseclass()
-    
+
 
 @request_type('rest')
 class IRESTRequest(ITypedRequest):
