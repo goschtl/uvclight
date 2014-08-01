@@ -35,6 +35,7 @@ from .utils import (
     current_principal,
     url,
     load_zcml,
+    eval_loader,
     )
 
 from .events import (
