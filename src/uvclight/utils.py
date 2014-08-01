@@ -11,6 +11,8 @@ from zope.security.management import getInteraction
 from dolmen.location import get_absolute_url
 from cromlech.configuration.utils import load_zcml
 
+
+marker = object()
 TEMPLATES_DIR = path.join(path.dirname(__file__), 'templates')
 
 
