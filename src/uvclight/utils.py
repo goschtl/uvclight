@@ -6,10 +6,11 @@ import json
 import urllib
 import xmlrpclib
 from os import path
+
+from cromlech.configuration.utils import load_zcml
+from dolmen.location import get_absolute_url
 from dolmen.template import TALTemplate
 from zope.security.management import getInteraction
-from dolmen.location import get_absolute_url
-from cromlech.configuration.utils import load_zcml
 
 
 marker = object()
