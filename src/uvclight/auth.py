@@ -18,13 +18,15 @@ try:
     from cromlech.security import Principal
     from cromlech.webob import Request
     from dolmen.view import query_view
-    from zope.component import queryMultiAdapter
+    from zope.component import queryMultiAdapter, getUtility
     from zope.event import notify
     from zope.interface import implementer
     from zope.location import Location
     from zope.security import canAccess
     from zope.security.proxy import removeSecurityProxy
     from zope.security.simplepolicies import ParanoidSecurityPolicy
+    from zope.securitypolicy.interfaces import IRole
+    from grokcore.security import permissions
 
 
     class Principal(Principal):
@@ -47,11 +49,11 @@ try:
         """
         """
         session_user_key = "user"
-        
+
         def __init__(self, users, realm):
             self.users = users
             self.realm = realm
-            
+
         def valid_user(self, username, password):
             """Is this a valid username/password? (True or False)"""
             account = self.users.get(username, None)
@@ -74,7 +76,7 @@ try:
             view = query_view(request, self, name='login')
             if view is None:
                 raise NotImplementedError
-        
+
             with Interaction():
                 response = view()
             return response(environ, start_response)
@@ -106,7 +108,7 @@ try:
 
         title = message = u"Please log in"
         action = ""
-        
+
         def update(self):
             self.username = self.request.environment.get(
                 self.context.environ_user_key, '')
@@ -127,6 +129,11 @@ try:
 
     class SimpleSecurityPolicy(ParanoidSecurityPolicy):
 
+        def getPermissionForRole(self, role):
+            role = getUtility(IRole, role)
+            print tuple(permissions.bind().get(role))
+            return permissions.bind().get(role)
+
         def checkPermission(self, permission, object):
             if permission == 'zope.View':
                 return True
@@ -135,7 +142,10 @@ try:
                 pdb.set_trace()                
             principals = [p.principal for p in self.participations]
             for principal in principals:
-                permissions = getattr(principal, 'permissions', set())
+                permissions = set()
+                for role in getattr(principal, 'roles', []):
+                    permissions = permissions.union(self.getPermissionForRole(role))
+                permissions = permissions.union(getattr(principal, 'permissions', set()))
                 if permission in permissions:
                     return True
             return False
