@@ -48,19 +48,20 @@ class UVCModelLookup(ModelLookup):
             for consumer in self.lookup(obj):
                 any_consumed, obj, unconsumed = consumer(
                     request, obj, unconsumed)
-                notify(BeforeTraverseEvent(obj, request))
                 if any_consumed:
+                    notify(BeforeTraverseEvent(obj, request))
                     break
             else:
                 break
+
         notify(ModelFoundEvent(obj, request))
         return obj, unconsumed
 
 
 def create_base_publisher(secure=False):
-    fetcher = query_view
+    fetcher = view_locator(query_view)
     if secure:
         fetcher = component_protector(fetcher)
-    fetcher = view_locator(fetcher)
     view_lookup = ViewLookup(fetcher)
-    return DawnlightPublisher(model_lookup=UVCModelLookup(), view_lookup=view_lookup)
+    return DawnlightPublisher(
+        model_lookup=UVCModelLookup(), view_lookup=view_lookup)

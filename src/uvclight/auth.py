@@ -130,6 +130,9 @@ try:
         def checkPermission(self, permission, object):
             if permission == 'zope.View':
                 return True
+            else:
+                import pdb
+                pdb.set_trace()                
             principals = [p.principal for p in self.participations]
             for principal in principals:
                 permissions = getattr(principal, 'permissions', set())
