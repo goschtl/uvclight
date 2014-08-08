@@ -11,10 +11,25 @@ from cromlech.configuration.utils import load_zcml
 from dolmen.location import get_absolute_url
 from dolmen.template import TALTemplate
 from zope.security.management import getInteraction
-
+from GenericCache.GenericCache import GenericCache, default_marshaller
+from GenericCache.GenericCache import cached
 
 marker = object()
 TEMPLATES_DIR = path.join(path.dirname(__file__), 'templates')
+lineage_cache = GenericCache(expiry=3000, maxsize=5000)
+
+    
+def node_marshaller(func, node):
+    return repr((func.__name__, node._p_oid))
+
+
+@cached(lineage_cache, marshaller=node_marshaller)
+def get_lineage(node):
+    result = []
+    while node is not None:
+        result.append(node)
+        node = getattr(node, '__parent__', None)
+    return result
 
 
 def get_template(filename, dir=None):

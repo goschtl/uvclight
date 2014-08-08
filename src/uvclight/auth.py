@@ -7,37 +7,41 @@ try:
     from .directives import context, name
     from .utils import get_template
     from .events import UserLoggedInEvent
-
+    
     from barrel import form
-    from webob.exc import HTTPTemporaryRedirect
     from cromlech.browser import IPublicationRoot
-    from cromlech.browser import getSession, IResponseFactory, ILayout
     from cromlech.browser import exceptions
+    from cromlech.browser import getSession, IResponseFactory, ILayout
     from cromlech.security import Interaction, unauthenticated_principal
-    from zope.security.management import getInteraction
     from cromlech.security import Principal
     from cromlech.webob import Request
     from dolmen.view import query_view
+    from grokcore.security import permissions
+    from webob.exc import HTTPTemporaryRedirect
     from zope.component import queryMultiAdapter, getUtility
     from zope.event import notify
     from zope.interface import implementer
     from zope.location import Location
     from zope.security import canAccess
+    from zope.security.checker import CheckerPublic
+    from zope.security.management import getInteraction
     from zope.security.proxy import removeSecurityProxy
     from zope.security.simplepolicies import ParanoidSecurityPolicy
     from zope.securitypolicy.interfaces import IRole
-    from grokcore.security import permissions
+    from zope.security.proxy import removeSecurityProxy
+
+    unauthenticated_principal.roles = set()
+    unauthenticated_principal.permissions = set()
 
 
     class Principal(Principal):
 
-        def __init__(self, id, title=u'', description=u'', roles=[],
-                     permissions=[]):
+        def __init__(self, id, **attrs):
             self.id = id
-            self.title = title
-            self.description = description
-            self.roles = roles
-            self.permissions = permissions
+            self.title = attrs.get('title', u'')
+            self.description = attrs.get('description', u'')
+            self.roles = attrs.get('roles', set())
+            self.permissions = attrs.get('permissions', set())
 
 
     def get_layout(authform, request):
@@ -127,28 +131,32 @@ try:
         return deco
 
 
-    class SimpleSecurityPolicy(ParanoidSecurityPolicy):
+    def getPermissionForRole(role):
+        role = getUtility(IRole, role)
+        return set(permissions.bind().get(role))
 
-        def getPermissionForRole(self, role):
-            role = getUtility(IRole, role)
-            print tuple(permissions.bind().get(role))
-            return permissions.bind().get(role)
+
+    class SimpleSecurityPolicy(ParanoidSecurityPolicy):
+        public = frozenset(('zope.View', CheckerPublic))
+
+        @staticmethod
+        def get_permissions(principal):
+            permissions = principal.permissions
+            for role in principal.roles:
+                permissions |= getPermissionForRole(role)
+            return permissions
 
         def checkPermission(self, permission, object):
-            if permission == 'zope.View':
+            if permission in self.public:
                 return True
-            else:
-                import pdb
-                pdb.set_trace()                
-            principals = [p.principal for p in self.participations]
-            for principal in principals:
-                permissions = set()
-                for role in getattr(principal, 'roles', []):
-                    permissions = permissions.union(self.getPermissionForRole(role))
-                permissions = permissions.union(getattr(principal, 'permissions', set()))
+            
+            for participation in self.participations:
+                permissions = self.get_permissions(participation.principal)
+                print permissions
                 if permission in permissions:
                     return True
             return False
+
 
     def security_check(lookup):
         def check(*args, **kwargs):
