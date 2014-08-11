@@ -7,7 +7,7 @@ try:
     from .directives import context, name
     from .utils import get_template
     from .events import UserLoggedInEvent
-    
+
     from barrel import form
     from cromlech.browser import IPublicationRoot
     from cromlech.browser import exceptions
@@ -137,7 +137,7 @@ try:
 
 
     class SimpleSecurityPolicy(ParanoidSecurityPolicy):
-        public = frozenset(('zope.View', CheckerPublic))
+        public = frozenset(('zope.Public', CheckerPublic))
 
         @staticmethod
         def get_permissions(principal):
@@ -149,7 +149,7 @@ try:
         def checkPermission(self, permission, object):
             if permission in self.public:
                 return True
-            
+
             for participation in self.participations:
                 permissions = self.get_permissions(participation.principal)
                 print permissions
