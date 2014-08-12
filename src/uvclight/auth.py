@@ -152,7 +152,6 @@ try:
 
             for participation in self.participations:
                 permissions = self.get_permissions(participation.principal)
-                print permissions
                 if permission in permissions:
                     return True
             return False
