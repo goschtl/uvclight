@@ -17,6 +17,7 @@ try:
     from cromlech.webob import Request
     from dolmen.view import query_view
     from grokcore.security import permissions
+    from grokcore.security.interfaces import IRole
     from webob.exc import HTTPTemporaryRedirect
     from zope.component import queryMultiAdapter, getUtility
     from zope.event import notify
@@ -27,7 +28,6 @@ try:
     from zope.security.management import getInteraction
     from zope.security.proxy import removeSecurityProxy
     from zope.security.simplepolicies import ParanoidSecurityPolicy
-    from zope.securitypolicy.interfaces import IRole
     from zope.security.proxy import removeSecurityProxy
 
     unauthenticated_principal.roles = set()
@@ -174,5 +174,4 @@ try:
         return check
 
 except ImportError:
-    #print "The Auth Module was not Loaded"
-    raise
+    print "The Auth Module was not Loaded"

@@ -4,6 +4,7 @@ import sys, os
 version = '0.1'
 
 base_requires = [
+    'BeautifulSoup',
     'unidecode',
     'Chameleon',
     'cromlech.browser',
@@ -27,6 +28,7 @@ base_requires = [
     'dolmen.template[translate] >= 0.3.3',
     'dolmen.view[security]',
     'dolmen.viewlet',
+    'GenericCache',
     'grokcore.component',
     'grokcore.security',
     'martian',
