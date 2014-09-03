@@ -12,16 +12,13 @@ from cromlech.zodb import Site, get_site
 
 class SecurePublication(object):
 
-    layers = frozenset([IDGUVRequest])
-    
-    def __init__(self, environ_key, name, session_key):
-        self.name = name
-        self.environ_key = environ_key
+    def __init__(self, session_key, layers=None):
+        self.layers = layers or list()
+        self.publish = self.get_publisher()
         self.session_key = session_key
-        self.publish = self.get_publisher().publish
 
     def get_publisher(self):
-        return create_base_publisher(secure=True)
+        return create_base_publisher(secure=True).publish
         
     def get_credentials(self, environ):
         session = getSession()
@@ -31,6 +28,9 @@ class SecurePublication(object):
         if username:
             return Principal(user)
         return unauthenticated_principal
+
+    def site_manager(self):
+        raise NotImplementedError
     
     def __call__(self, environ, start_response):
 
