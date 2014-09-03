@@ -2,13 +2,13 @@
 
 from .auth import Principal
 from .context import ContextualRequest
-from .publisher import create_base_publisher
+from .publishing import create_base_publisher
 from .security import Interaction
 from .session import sessionned
 
 from cromlech.browser import getSession
 from cromlech.security import unauthenticated_principal
-from cromlech.zodb import Site, get_site
+from zope.security.proxy import removeSecurityProxy
 
 
 class SecurePublication(object):
@@ -40,9 +40,9 @@ class SecurePublication(object):
             with ContextualRequest(environ, layers=self.layers) as request:
                 user = self.get_credentials(environ)
                 request.principal = self.principal_factory(user)
-                sm = self.site_manager(environ)
+                site_manager = self.site_manager(environ)
 
-                with site:
+                with site_manager as site:
                     with Interaction(request.principal):
                         response = self.publish(request, site)
                         response = removeSecurityProxy(response)
