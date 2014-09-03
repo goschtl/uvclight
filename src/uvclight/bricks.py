@@ -6,6 +6,7 @@ from .publisher import create_base_publisher
 from .security import Interaction
 from .session import sessionned
 
+from cromlech.browser import getSession
 from cromlech.security import unauthenticated_principal
 from cromlech.zodb import Site, get_site
 
