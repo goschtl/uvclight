@@ -30,10 +30,13 @@
   <grok:grok package="dolmen.template" />
 
   <include package="." file="meta.zcml" />
+
   <grok:grok package=".auth" />
   <grok:grok package=".components" />
-  <grok:grok package=".views" />
+  <grok:grok package=".errors" />
+  <grok:grok package=".login" />
   <grok:grok package=".managers" />
+  <grok:grok package=".views" />
 
 </configure>
 
