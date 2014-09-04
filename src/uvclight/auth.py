@@ -173,5 +173,5 @@ try:
             return None
         return check
 
-except ImportError:
-    print "The Auth Module was not Loaded"
+except ImportError, e:
+    print "The Auth Module was not Loaded (%r)" % e
