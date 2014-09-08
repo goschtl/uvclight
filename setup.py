@@ -22,6 +22,7 @@ base_requires = [
     'dolmen.layout',
     'dolmen.location',
     'dolmen.menu',
+    'dolmen.container',
     'dolmen.message',
     'dolmen.request',
     'dolmen.tales',
@@ -51,6 +52,9 @@ zodb_requires = [
     'ZODB',
     'persistent',
     'cromlech.zodb',
+    'dolmen.content',
+    'dolmen.container',
+    'zope.annotation',
     ]
 
 sql_requires = [
