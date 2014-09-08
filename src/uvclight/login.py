@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 
-from .auth import Principal
 from .components import Form, Fields, action
 from .directives import name, context, require
 from .events import UserLoggedInEvent
@@ -12,6 +11,18 @@ from zope.component.hooks import getSite
 from zope.event import notify
 from zope.interface import Interface
 from zope.schema import TextLine, Password
+
+
+try:
+    from . import auth
+
+    def make_principal(*args):
+        return auth.Principal(*args)
+        
+except ImportError:
+
+    def make_principal(*args):
+        raise NotImplementedError
 
 
 class ICredentials(Interface):
@@ -38,7 +49,7 @@ class Login(Form):
     require('zope.Public')
 
     fields = Fields(ILoginForm)
-
+    
     @action(u'Login')
     def log_me(self):
         data, errors = self.extractData()
@@ -66,7 +77,7 @@ class Login(Form):
                 session = getSession()
                 session['username'] = data['username']
                 self.flash(u"Login successful.")
-                principal = Principal(data['username'])
+                principal = make_principal(data['username'])
                 self.request.principal = principal
                 notify(UserLoggedInEvent(principal))
                 return SuccessMarker(
