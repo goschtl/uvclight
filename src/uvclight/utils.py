@@ -10,15 +10,31 @@ from os import path
 from cromlech.configuration.utils import load_zcml
 from dolmen.location import get_absolute_url
 from dolmen.template import TALTemplate
+from zope.component.hooks import setSite
 from zope.security.management import getInteraction
-from GenericCache.GenericCache import GenericCache, default_marshaller
-from GenericCache.GenericCache import cached
+from GenericCache.GenericCache import cached, GenericCache, default_marshaller
+
 
 marker = object()
 TEMPLATES_DIR = path.join(path.dirname(__file__), 'templates')
 lineage_cache = GenericCache(expiry=3000, maxsize=5000)
 
-    
+
+class Site(object):
+
+    def __init__(self, model, name):
+        self.model = model
+        self.name = name
+
+    def __enter__(self):
+        root = self.model(self.name)
+        setSite(root)
+        return root
+
+    def __exit__(self, exc_type, exc_value, traceback):
+        setSite()
+
+
 def node_marshaller(func, node):
     return repr((func.__name__, node._p_oid))
 

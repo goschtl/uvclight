@@ -30,7 +30,7 @@ class SecurePublication(object):
             return Principal(user)
         return unauthenticated_principal
 
-    def site_manager(self):
+    def site_manager(self, environ):
         raise NotImplementedError
     
     def __call__(self, environ, start_response):
