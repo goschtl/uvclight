@@ -18,7 +18,7 @@ try:
 
     def make_principal(*args):
         return auth.Principal(*args)
-        
+
 except ImportError:
 
     def make_principal(*args):
@@ -49,7 +49,7 @@ class Login(Form):
     require('zope.Public')
 
     fields = Fields(ILoginForm)
-    
+
     @action(u'Login')
     def log_me(self):
         data, errors = self.extractData()

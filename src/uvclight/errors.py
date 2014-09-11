@@ -18,7 +18,7 @@ class UnauthorizedPage(Page):
             u" Please login.")
         self.redirect(self.url(obj) + '/login')
 
-    
+
 class ForbiddenPage(Page):
     name('')
     context(exceptions.HTTPForbidden)

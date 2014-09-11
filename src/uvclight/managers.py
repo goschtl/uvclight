@@ -17,7 +17,7 @@ class Headers(uvclight.ViewletManager):
 class PageTop(uvclight.ViewletManager):
     uvclight.name('uvc-pagetop')
     uvclight.context(Interface)
-    
+
 
 @uvclight.implementer(interfaces.IAboveContent)
 class AboveContent(uvclight.ViewletManager):

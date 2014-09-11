@@ -213,7 +213,6 @@ class ViewletForm(ViewletForm):
     def namespace(self):
         namespace = super(ViewletForm, self).namespace()
         namespace['macro'] = self.getTemplate().macros
-        import pdb; pdb.set_trace()
         return namespace
 
     def getTemplate(self):
@@ -314,21 +313,23 @@ class DeleteMenuItem(MenuItem):
 class Table(BaseTable):
 
     def getBatchSize(self):
-        return int(self.request.form.get(self.prefix + '-batchSize',
-            self.batchSize))
+        return int(self.request.form.get(
+            self.prefix + '-batchSize', self.batchSize))
 
     def getBatchStart(self):
-        return int(self.request.form.get(self.prefix + '-batchStart',
-            self.batchStart))
+        return int(self.request.form.get(
+            self.prefix + '-batchStart', self.batchStart))
 
     def getSortOn(self):
-        """Returns sort on column id."""
+        """Returns sort on column id.
+        """
         return self.request.form.get(self.prefix + '-sortOn', self.sortOn)
 
     def getSortOrder(self):
-        """Returns sort order criteria."""
-        return self.request.form.get(self.prefix + '-sortOrder',
-            self.sortOrder)
+        """Returns sort order criteria.
+        """
+        return self.request.form.get(
+            self.prefix + '-sortOrder', self.sortOrder)
 
 
 class TableView(Table, View):
@@ -362,7 +363,6 @@ class LinkColumn(LinkColumn):
             return '%s/%s' % (
                 get_absolute_url(item, self.request), self.linkName)
         return get_absolute_url(item, self.request)
-
 
 
 class CheckBoxColumn(CheckBoxColumn):

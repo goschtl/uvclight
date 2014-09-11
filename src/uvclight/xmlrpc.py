@@ -31,8 +31,10 @@ def handle_xmplrpc_request(dispatcher, environ, start_response):
         start_response("500 Server error", [('Content-Type', 'text/plain')])
         return []
     else:
-        start_response("200 OK", [('Content-Type','text/xml'),
-                                  ('Content-Length', str(len(response)),)])
+        start_response("200 OK", [
+            ('Content-Type', 'text/xml'),
+            ('Content-Length', str(len(response))),
+            ])
         return [response]
 
 
@@ -52,7 +54,7 @@ class XMLRPCApp(object):
             if isinstance(str, unicode):
                 return str
             return unicode(str, enc)
-        
+
         def base_path(request):
             path = safe_path(request.path)
             script_name = safe_unicode(request.script_name)

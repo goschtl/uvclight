@@ -6,7 +6,10 @@ from gevent import spawn, wait
 from gevent.event import Event
 from gevent.queue import Queue
 from gevent.select import select
-from gevent.monkey import patch_all; patch_all()
+from gevent.monkey import patch_all
+
+# gevent patching
+patch_all()
 
 from flask.ext.uwsgi_websocket import (
     GeventWebSocketClient, WebSocketMiddleware)

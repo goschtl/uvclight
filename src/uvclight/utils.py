@@ -138,7 +138,7 @@ def eval_loader(expr):
             return val
         except ImportError:
             raise ImportError(
-                    "Bad specification %s: no item name %s in %s." %
-                    (expr, elt, modname))
+                "Bad specification %s: no item name %s in %s." %
+                (expr, elt, modname))
     else:
         raise RuntimeError("Bad specification %s: no module name." % expr)

@@ -23,7 +23,7 @@ class SecurePublication(object):
             self, view_lookup=secured_view, model_lookup=base_model_lookup):
         publisher = DawnlightPublisher(model_lookup, view_lookup)
         return publisher.publish
-        
+
     def get_credentials(self, environ):
         session = getSession()
         user = environ.get('REMOTE_USER') or session.get('username')
@@ -35,7 +35,7 @@ class SecurePublication(object):
 
     def site_manager(self, environ):
         raise NotImplementedError
-    
+
     def __call__(self, environ, start_response):
 
         @sessionned(self.session_key)
