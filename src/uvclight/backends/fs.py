@@ -49,7 +49,7 @@ class Folder(Location):
         self.root_path = path
 
     def get_file(self, name):
-        path = join(self.root_path, name)
+        path = os.path.join(self.root_path, name)
         assert os.path.isfile(path)
         iterator = FileIterator(open(path, 'rb'))
         size = os.path.getsize(path)
