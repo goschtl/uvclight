@@ -2,16 +2,16 @@ try:
     from deform import Button, Form, ValidationFailure
     from uvclight import View, Page
 
-    
+
     class Action(Button):
 
         def extractData(self, form, control_items):
             return form.validate(control_items)
-        
+
         def __call__(self, view, form, data):
             validated = self.extractData(form, data.items())
             return validated
-            
+
 
     class Form(object):
         handler = Form
@@ -33,6 +33,7 @@ try:
                 if button.name in self.request.form:
                     try:
                         validated = button(self, form, self.request.form)
+                        assert validated
                     except ValidationFailure, e:
                         return e.render()
                     else:

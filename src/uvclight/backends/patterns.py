@@ -8,7 +8,7 @@ try:
     from dolmen.location import get_absolute_url
     from dawnlight.interfaces import IConsumer
     from dawnlight import ModelLookup
-    
+
 
     def register_models(registry, *models):
         for model in models:
@@ -24,14 +24,14 @@ try:
         def __init__(self, **kws):
             self.kws = kws
 
-        
+
     def default_component(root, request):
         def factory(**kwargs):
             url = get_absolute_url(root, request)
             return redirect_response(response.Response, url)
         return factory
 
-    
+
     class TrajectLookup(ModelLookup):
 
         def __init__(self, default=DefaultModel):
@@ -70,6 +70,7 @@ try:
         implements(IConsumer)
 
         def __call__(self, request, root, stack):
+            # FIXME : PATTERNS is not defined. We need a better way to consume
             left = '/'.join((name for ns, name in reversed(stack)))
             Default = default_component(root, request)
             unconsumed, consumed, obj = PATTERNS.consume(root, left, Default)
@@ -77,7 +78,7 @@ try:
                 return True, obj, stack[:-len(consumed)]
             return False, obj, stack
 
-        
+
 except ImportError:
     print "Traject capabilities don't seem to be activated"
     raise

@@ -7,7 +7,10 @@ try:
     from dolmen.sqlcontainer import SQLContainer
     from sqlalchemy_imageattach import context as store
     from sqlalchemy_imageattach.stores.fs import HttpExposedFileSystemStore
-    from uvclight.backends.patterns import TrajectLookup
+
+
+    # for pyflakes. We're just convenient imports
+    create_engine, SQLContainer
 
 
     def transaction_sql(engine):
@@ -40,7 +43,7 @@ try:
 
             if name is None:
                 name = str(cls.__name__.lower())
-                
+
             # We register our SQLengine under a given name
             engine = create_and_register_engine(dsn, name)
 
@@ -57,7 +60,7 @@ try:
             else:
                 fs_store = None
                 return cls(session_key, engine, name, fs_store, layers)
-        
+
         def __init__(self, session_key, engine, name,
                      fs_store=None, layers=None):
             self.name = name
