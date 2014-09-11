@@ -46,7 +46,7 @@ auth_requires = [
     'barrel',
     'cromlech.security',
     'cromlech.wsgistate',
-]
+    ]
 
 zodb_requires = [
     'ZODB',
@@ -62,6 +62,8 @@ sql_requires = [
     'SQLAlchemy',
     'cromlech.sqlalchemy',
     'dolmen.sqlcontainer',
+    'sqlalchemy_imageattach',
+    'uvclight[traject]',
     ]
 
 mongo_requires = [

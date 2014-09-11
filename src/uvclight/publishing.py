@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 
-from cromlech.dawnlight import DawnlightPublisher
 from cromlech.dawnlight import ViewLookup
 from cromlech.dawnlight import view_locator, query_view
 from cromlech.dawnlight.lookup import ModelLookup
@@ -58,10 +57,6 @@ class UVCModelLookup(ModelLookup):
         return obj, unconsumed
 
 
-def create_base_publisher(secure=False):
-    fetcher = view_locator(query_view)
-    if secure:
-        fetcher = component_protector(fetcher)
-    view_lookup = ViewLookup(fetcher)
-    return DawnlightPublisher(
-        model_lookup=UVCModelLookup(), view_lookup=view_lookup)
+located_view = ViewLookup(view_locator(query_view))
+secured_view = ViewLookup(component_protector(view_locator(query_view)))
+base_model_lookup = UVCModelLookup()

@@ -2,11 +2,12 @@
 
 from .auth import Principal
 from .context import ContextualRequest
-from .publishing import create_base_publisher
+from .publishing import secured_view, base_model_lookup
 from .security import Interaction
 from .session import sessionned
 
 from cromlech.browser import getSession
+from cromlech.dawnlight import DawnlightPublisher
 from cromlech.security import unauthenticated_principal
 from zope.security.proxy import removeSecurityProxy
 
@@ -18,8 +19,10 @@ class SecurePublication(object):
         self.publish = self.get_publisher()
         self.session_key = session_key
 
-    def get_publisher(self):
-        return create_base_publisher(secure=True).publish
+    def get_publisher(
+            self, view_lookup=secured_view, model_lookup=base_model_lookup):
+        publisher = DawnlightPublisher(model_lookup, view_lookup)
+        return publisher.publish
         
     def get_credentials(self, environ):
         session = getSession()

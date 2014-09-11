@@ -33,31 +33,40 @@ try:
 
     class SQLSecurePublication(SecurePublication):
 
-        def __init__(self, session_key, engine, fs_store=None, layers=None):
+        def __init__(self, session_key, engine, name,
+                     fs_store=None, layers=None):
+            self.name = name
             self.layers = layers or list()
-            self.publish = self.get_publisher()
             self.session_key = session_key
             self.engine = engine
             self.fs_store = fs_store
+            self.publish = self.get_publisher()
 
         @classmethod
-        def create(cls, dsn, name, base, store_root=None, store_prefix=None):
+        def create(cls, session_key='session.key', dsn='sqlite://',
+                   layers=None, name=None, base=None,
+                   store_root=None, store_prefix=None):
 
+            if name is None:
+                name = str(cls.__name__.lower())
+                
             # We register our SQLengine under a given name
             engine = create_and_register_engine(dsn, name)
-            engine.bind(base)
 
-            # We create it all
-            metadata = base.metadata
-            metadata.create_all(engine.engine, checkfirst=True)
+            # We use a declarative base, if it exists we bind it and create
+            if base is not None:
+                engine.bind(base)
+                metadata = base.metadata
+                metadata.create_all(engine.engine, checkfirst=True)
 
             if store_root is not None:
                 fs_store = HttpExposedFileSystemStore(store_root, store_prefix)
-                app = cls(session_key, engine, fs_store, layers)
+                app = cls(session_key, engine, name, fs_store, layers)
                 return fs_store.wsgi_middleware(app)
             else:
-                app = cls(session_key, engine, fs_store=None, layers=layers)
-                return app
+                fs_store = None
+                return cls(session_key, engine, name, fs_store, layers)
+
 
         def __call__(self, environ, start_response):
 
@@ -70,5 +79,6 @@ try:
             return publish(environ, start_response)
 
 
-except ImportError:
+except ImportError as exc:
+    print exc
     print "SQL capabilities don't seem to be activated"
