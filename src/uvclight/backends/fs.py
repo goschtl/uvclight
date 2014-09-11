@@ -18,7 +18,7 @@ class FileIterable(object):
     @classmethod
     def make_response(cls, file, filename, content_type, content_length):
         fileobj = cls(file)
-        res = Response(content_type=fileobj.content_type)
+        res = Response(content_type=content_type)
         res.content_disposition = 'attachment; filename="%s"' % filename
         res.app_iter = fileobj
         res.content_length = content_length
