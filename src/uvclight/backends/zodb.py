@@ -2,6 +2,7 @@ try:
     import ZODB
     import cromlech.zodb
 
+    from ..bricks import SecurePublication
     from cromlech.zodb import Site, get_site
     from cromlech.zodb.middleware import ZODBApp
     from cromlech.zodb.utils import init_db
@@ -57,16 +58,18 @@ try:
 
 
     class ZODBSecurePublication(SecurePublication):
-
-        def __init__(self, session_key, environ_key, name, layers=None):
-            SecurePublication.__init__(self, session_key, layers)
-            self.environ_key = environ_key
-
+        
         @classmethod
-        def create(cls, session_key, environ_key, conf, name, root, secur):
+        def create(cls, session_key='session.key', environ_key='zodb.key',
+                   conf=None, name='app', root=None, layers=None):
             db = init_db(conf, make_application(name, root))
             app = cls(session_key, environ_key, name, layers=layers)
             return ZODBApp(app, db, key=environ_key)
+        
+        def __init__(self, session_key, environ_key, name, layers=None):
+            SecurePublication.__init__(self, session_key, layers)
+            self.environ_key = environ_key
+            self.name = name
 
         def site_manager(self, environ):
             conn = environ[self.environ_key]

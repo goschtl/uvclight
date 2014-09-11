@@ -33,15 +33,6 @@ try:
 
     class SQLSecurePublication(SecurePublication):
 
-        def __init__(self, session_key, engine, name,
-                     fs_store=None, layers=None):
-            self.name = name
-            self.layers = layers or list()
-            self.session_key = session_key
-            self.engine = engine
-            self.fs_store = fs_store
-            self.publish = self.get_publisher()
-
         @classmethod
         def create(cls, session_key='session.key', dsn='sqlite://',
                    layers=None, name=None, base=None,
@@ -66,7 +57,15 @@ try:
             else:
                 fs_store = None
                 return cls(session_key, engine, name, fs_store, layers)
-
+        
+        def __init__(self, session_key, engine, name,
+                     fs_store=None, layers=None):
+            self.name = name
+            self.layers = layers or list()
+            self.session_key = session_key
+            self.engine = engine
+            self.fs_store = fs_store
+            self.publish = self.get_publisher()
 
         def __call__(self, environ, start_response):
 
