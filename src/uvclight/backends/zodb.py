@@ -57,13 +57,13 @@ try:
 
         @classmethod
         def create(cls, session_key='session.key', environ_key='zodb.key',
-                   conf=None, name='app', root=None, layers=None):
+                   conf=None, name='app', root=None):
             db = init_db(conf, make_application(name, root))
-            app = cls(session_key, environ_key, name, layers=layers)
+            app = cls(session_key, environ_key, name)
             return ZODBApp(app, db, key=environ_key)
 
-        def __init__(self, session_key, environ_key, name, layers=None):
-            SecurePublication.__init__(self, session_key, layers)
+        def __init__(self, session_key, environ_key, name):
+            SecurePublication.__init__(self, session_key)
             self.environ_key = environ_key
             self.name = name
 

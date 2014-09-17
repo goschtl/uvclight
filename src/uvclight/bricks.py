@@ -14,8 +14,13 @@ from zope.security.proxy import removeSecurityProxy
 
 class SecurePublication(object):
 
-    def __init__(self, session_key, layers=None):
-        self.layers = layers or list()
+    layers = None
+    
+    @classmethod
+    def create(cls, session_key='session.key'):
+        return cls(session_key)
+    
+    def __init__(self, session_key):
         self.publish = self.get_publisher()
         self.session_key = session_key
 
@@ -40,7 +45,8 @@ class SecurePublication(object):
 
         @sessionned(self.session_key)
         def publish(environ, start_response):
-            with ContextualRequest(environ, layers=self.layers) as request:
+            layers = self.layers or list()
+            with ContextualRequest(environ, layers=layers) as request:
                 user = self.get_credentials(environ)
                 request.principal = self.principal_factory(user)
                 site_manager = self.site_manager(environ)
