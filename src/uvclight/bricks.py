@@ -12,18 +12,26 @@ from cromlech.browser import getSession
 from cromlech.dawnlight import DawnlightPublisher
 from cromlech.security import unauthenticated_principal
 from zope.security.proxy import removeSecurityProxy
+from uvclight.utils import with_zcml, with_i18n
 
 
 class Publication(object):
 
     layers = None
-    
+
+    #@classmethod
+    #def create(cls, session_key='session.key'):
+    #    return cls(session_key)
+
     @classmethod
-    def create(cls, session_key='session.key'):
-        return cls(session_key)
-    
-    def __init__(self, session_key):
+    @with_zcml('zcml_file')
+    @with_i18n('langs', fallback='en')
+    def create(cls, gc, name, session_key):
+        return cls(name, session_key)
+
+    def __init__(self, name, session_key):
         self.publish = self.get_publisher()
+        self.name = name
         self.session_key = session_key
 
     def get_publisher(
@@ -42,7 +50,7 @@ class Publication(object):
 
     def publish_traverse(self, request, site):
         return self.publish(request, site)
-    
+
     def __call__(self, environ, start_response):
 
         @sessionned(self.session_key)
@@ -61,7 +69,7 @@ class Publication(object):
 class SecurePublication(Publication):
 
     layers = None
- 
+
     def get_publisher(
             self, view_lookup=secured_view, model_lookup=base_model_lookup):
         publisher = DawnlightPublisher(model_lookup, view_lookup)
