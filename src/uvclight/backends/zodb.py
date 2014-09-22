@@ -68,7 +68,8 @@ try:
             self.session_key = session_key
             self.environ_key = environ_key
             self.name = name
-
+            self.publish = self.get_publisher()
+            
         def site_manager(self, environ):
             conn = environ[self.environ_key]
             site = get_site(conn, self.name)

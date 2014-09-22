@@ -2,7 +2,7 @@
 
 
 from .context import ContextualRequest
-from .publishing import located_view, secured_view, base_model_looku
+from .publishing import located_view, secured_view, base_model_lookup
 from .session import sessionned
 
 
@@ -77,7 +77,7 @@ class SecurePublication(Publication):
         return unauthenticated_principal
 
     def publish_traverse(self, request, site):
-        user = self.get_credentials(environ)
+        user = self.get_credentials(request.environment)
         request.principal = self.principal_factory(user)
         with Interaction(request.principal):
             response = self.publish(request, site)
