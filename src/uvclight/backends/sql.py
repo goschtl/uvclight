@@ -1,7 +1,5 @@
 try:
     import transaction
-
-    from ..bricks import SecurePublication
     from cromlech.sqlalchemy import SQLAlchemySession
     from cromlech.sqlalchemy import create_and_register_engine, create_engine
     from dolmen.sqlcontainer import SQLContainer
@@ -34,12 +32,13 @@ try:
         return sql_store
 
 
-    class SQLSecurePublication(SecurePublication):
-
+    class SQLPublication(object):
+        """Publication Mixin
+        """
+        
         @classmethod
         def create(cls, session_key='session.key', dsn='sqlite://',
-                   layers=None, name=None, base=None,
-                   store_root=None, store_prefix=None):
+                   name=None, base=None, store_root=None, store_prefix=None):
 
             if name is None:
                 name = str(cls.__name__.lower())
@@ -55,16 +54,14 @@ try:
 
             if store_root is not None:
                 fs_store = HttpExposedFileSystemStore(store_root, store_prefix)
-                app = cls(session_key, engine, name, fs_store, layers)
+                app = cls(session_key, engine, name, fs_store)
                 return fs_store.wsgi_middleware(app)
             else:
                 fs_store = None
-                return cls(session_key, engine, name, fs_store, layers)
+                return cls(session_key, engine, name, fs_store)
 
-        def __init__(self, session_key, engine, name,
-                     fs_store=None, layers=None):
+        def __init__(self, session_key, engine, name, fs_store=None):
             self.name = name
-            self.layers = layers or list()
             self.session_key = session_key
             self.engine = engine
             self.fs_store = fs_store
@@ -75,7 +72,7 @@ try:
             @transaction_sql(self.engine)
             @sql_storage(self.fs_store)
             def publish(environ, start_response):
-                return SecurePublication.__call__(
+                return super(SQLPublication, self).__call__(
                     self, environ, start_response)
 
             return publish(environ, start_response)
