@@ -5,6 +5,8 @@ try:
     from dolmen.sqlcontainer import SQLContainer
     from sqlalchemy_imageattach import context as store
     from sqlalchemy_imageattach.stores.fs import HttpExposedFileSystemStore
+    from uvclight.utils import with_zcml, with_i18n
+    from ..bricks import Publication
 
 
     # for pyflakes. We're just convenient imports
@@ -31,13 +33,17 @@ try:
             return caller
         return sql_store
 
-
-    class SQLPublication(object):
+    class SQLPublication(Publication):
         """Publication Mixin
         """
-        
+
+        def setup_database(self, engine):
+            raise NotImplementedError
+
         @classmethod
-        def create(cls, session_key='session.key', dsn='sqlite://',
+        @with_zcml('zcml_file')
+        @with_i18n('langs', fallback='en')
+        def create(cls, gc, session_key='session.key', dsn='sqlite://',
                    name=None, base=None, store_root=None, store_prefix=None):
 
             if name is None:
@@ -46,11 +52,12 @@ try:
             # We register our SQLengine under a given name
             engine = create_and_register_engine(dsn, name)
 
+
             # We use a declarative base, if it exists we bind it and create
-            if base is not None:
-                engine.bind(base)
-                metadata = base.metadata
-                metadata.create_all(engine.engine, checkfirst=True)
+            #if base is not None:
+            #    engine.bind(base)
+            #    metadata = base.metadata
+            #    metadata.create_all(engine.engine, checkfirst=True)
 
             if store_root is not None:
                 fs_store = HttpExposedFileSystemStore(store_root, store_prefix)
@@ -66,6 +73,8 @@ try:
             self.engine = engine
             self.fs_store = fs_store
             self.publish = self.get_publisher()
+            import pdb; pdb.set_trace()
+            self.setup_database(engine)
 
         def __call__(self, environ, start_response):
 
