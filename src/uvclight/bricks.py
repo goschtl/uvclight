@@ -7,12 +7,19 @@ from .session import sessionned
 
 
 from .security import Interaction
-from .auth import Principal
 from cromlech.browser import getSession
 from cromlech.dawnlight import DawnlightPublisher
 from cromlech.security import unauthenticated_principal
 from zope.security.proxy import removeSecurityProxy
 from uvclight.utils import with_zcml, with_i18n
+
+
+try:
+    from .auth import Principal
+except:
+    class Principal(object):
+        def __init__(self, user):
+            self.user = user
 
 
 class Publication(object):
