@@ -73,7 +73,7 @@ try:
             @sql_storage(self.fs_store)
             def publish(environ, start_response):
                 return super(SQLPublication, self).__call__(
-                    self, environ, start_response)
+                    environ, start_response)
 
             return publish(environ, start_response)
 
