@@ -1,7 +1,5 @@
 try:
     import transaction
-
-    from ..bricks import SecurePublication
     from cromlech.sqlalchemy import SQLAlchemySession
     from cromlech.sqlalchemy import create_and_register_engine, create_engine
     from dolmen.sqlcontainer import SQLContainer
@@ -34,8 +32,10 @@ try:
         return sql_store
 
 
-    class SQLSecurePublication(SecurePublication):
-
+    class SQLPublication(object):
+        """Publication Mixin
+        """
+        
         @classmethod
         def create(cls, session_key='session.key', dsn='sqlite://',
                    name=None, base=None, store_root=None, store_prefix=None):
@@ -72,7 +72,7 @@ try:
             @transaction_sql(self.engine)
             @sql_storage(self.fs_store)
             def publish(environ, start_response):
-                return SecurePublication.__call__(
+                return super(SQLPublication, self).__call__(
                     self, environ, start_response)
 
             return publish(environ, start_response)
