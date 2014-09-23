@@ -14,6 +14,8 @@ try:
     from zope.event import notify
     from zope.interface import implementer
     from zope.location import Location
+    from uvclight.utils import with_zcml, with_i18n
+    from ..bricks import Publication
 
 
     @implementer(IAttributeAnnotatable)
@@ -53,7 +55,7 @@ try:
         return create_app
 
 
-    class ZODBPublication(object):
+    class ZODBPublication(Publication):
         """Publication mixin
         """
 
@@ -69,7 +71,7 @@ try:
             self.environ_key = environ_key
             self.name = name
             self.publish = self.get_publisher()
-            
+
         def site_manager(self, environ):
             conn = environ[self.environ_key]
             site = get_site(conn, self.name)
