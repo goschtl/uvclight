@@ -60,8 +60,12 @@ try:
         """
 
         @classmethod
-        def create(cls, session_key='session.key', environ_key='zodb.key',
+        @with_zcml('zcml_file')
+        @with_i18n('langs', fallback='en')
+        def create(cls, gc, session_key='session.key', environ_key='zodb.key',
                    conf=None, name='app', root=None):
+            if root is None:
+                root = cls.root
             db = init_db(conf, make_application(name, root))
             app = cls(session_key, environ_key, name)
             return ZODBApp(app, db, key=environ_key)
