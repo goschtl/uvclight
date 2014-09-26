@@ -169,6 +169,7 @@ class Form(BaseForm):
     dataValidators = [InvariantsValidation]
 
     template = None
+    widgets_css = {}
 
     def url(self, obj, name=None, data=None):
         return compute_url(self.request, obj, name, data)
@@ -195,6 +196,12 @@ class Form(BaseForm):
     def getTemplate(self):
         template = getMultiAdapter((self, self.request), ITemplate)
         return template
+
+    def updateWidgets(self):
+        super(Form, self).updateWidgets()
+        for field, styles in self.widgets_css.items():
+            uid = '%s.%s.%s' % (self.prefix, field.prefix, field.identifier)
+            self.fieldWidgets[uid].htmlClass = lambda: styles
 
     def render(self):
         """Template is taken from the template attribute or searching
@@ -248,7 +255,7 @@ class AddForm(Form):
         notify(zope.lifecycleevent.ObjectCreatedEvent(obj))
         self.add(obj)
         return obj
-
+    
     def create(self, data):
         raise NotImplementedError
 
@@ -269,8 +276,8 @@ class AddForm(Form):
 class EditForm(crud.Edit, Form):
     title(u'Bearbeiten')
     baseclass()
-
-
+    
+    
 class EditMenuItem(MenuItem):
     menu(IContextualActionsMenu)
     title(u'Bearbeiten')
@@ -281,7 +288,7 @@ class EditMenuItem(MenuItem):
 class DisplayForm(crud.Display, Form):
     title(u'Anzeigen')
     baseclass()
-
+    
 
 class DefaultView(DisplayForm):
     name('index')
