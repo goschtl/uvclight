@@ -52,12 +52,11 @@ try:
             # We register our SQLengine under a given name
             engine = create_and_register_engine(dsn, name)
 
-
             # We use a declarative base, if it exists we bind it and create
-            #if base is not None:
-            #    engine.bind(base)
-            #    metadata = base.metadata
-            #    metadata.create_all(engine.engine, checkfirst=True)
+            if base is not None:
+                engine.bind(base)
+                metadata = base.metadata
+                metadata.create_all(engine.engine, checkfirst=True)
 
             if store_root is not None:
                 fs_store = HttpExposedFileSystemStore(store_root, store_prefix)
@@ -73,7 +72,6 @@ try:
             self.engine = engine
             self.fs_store = fs_store
             self.publish = self.get_publisher()
-            import pdb; pdb.set_trace()
             self.setup_database(engine)
 
         def __call__(self, environ, start_response):
