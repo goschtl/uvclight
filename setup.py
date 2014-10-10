@@ -4,6 +4,7 @@ import sys, os
 version = '0.1'
 
 base_requires = [
+    'ul.browser',
     'BeautifulSoup',
     'unidecode',
     'Chameleon',
@@ -43,27 +44,16 @@ base_requires = [
     ]
 
 auth_requires = [
-    'barrel',
-    'cromlech.security',
-    'cromlech.wsgistate',
+    'ul.auth',
     ]
 
 zodb_requires = [
-    'ZODB',
-    'persistent',
-    'cromlech.zodb',
-    'dolmen.content',
-    'dolmen.container',
-    'zope.annotation',
+    'ul.zodb',
     ]
 
 sql_requires = [
-    'transaction',
-    'SQLAlchemy',
-    'cromlech.sqlalchemy',
-    'dolmen.sqlcontainer',
-    'sqlalchemy_imageattach',
-    'uvclight[traject]',
+    'ul.sql',
+    'ul.traject',
     ]
 
 mongo_requires = [
