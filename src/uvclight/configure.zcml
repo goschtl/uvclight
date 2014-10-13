@@ -31,12 +31,11 @@
 
   <include package="." file="meta.zcml" />
 
-  <grok:grok package=".auth" />
-  <grok:grok package=".components" />
-  <grok:grok package=".errors" />
-  <grok:grok package=".login" />
-  <grok:grok package=".managers" />
-  <grok:grok package=".views" />
+  <grok:grok package="ul.auth" zcml:condition="installed ul.auth" />
+  <grok:grok package="ul.browser" zcml:condition="installed ul.browser" />
+  <grok:grok package="ul.content" zcml:condition="installed ul.content" />
+  <grok:grok package="ul.sql" zcml:condition="installed ul.sql" />
+  <grok:grok package="ul.traject" zcml:condition="installed ul.traject" />
 
 </configure>
 

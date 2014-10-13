@@ -33,6 +33,7 @@ base_requires = [
     'grokcore.security',
     'martian',
     'ul.browser',
+    'ul.content',
     'unidecode',
     'uvc.content',
     'uvc.design.canvas',

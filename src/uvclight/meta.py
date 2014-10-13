@@ -1,21 +1,24 @@
 # -*- coding: utf-8 -*-
 
 import martian
-from zope.interface import Interface
-from zope.component import provideAdapter
-from .interfaces import ISubMenu
-from .components import SubMenu, Column
-from . import directives
-from z3c.table.interfaces import ITable, IColumn
+from cromlech.browser import request as layer
 from dolmen.view.meta import default_view_name
+from dolmen.viewlet import context, view, slot as viewletmanager
+from grokcore.component import name, provides
+from ul.browser.components import SubMenu
+from uvc.design.canvas import ISubMenu
+from z3c.table.column import Column
+from z3c.table.interfaces import ITable, IColumn
+from zope.component import provideAdapter
+from zope.interface import Interface
 
 
 class SubMenuGrokker(martian.ClassGrokker):
     martian.component(SubMenu)
-    martian.directive(directives.context, default=Interface)
-    martian.directive(directives.layer, default=Interface)
-    martian.directive(directives.view, default=Interface)
-    martian.directive(directives.viewletmanager, default=None)
+    martian.directive(context, default=Interface)
+    martian.directive(layer, default=Interface)
+    martian.directive(view, default=Interface)
+    martian.directive(viewletmanager, default=None)
 
     def execute(self,
                 factory, config, context, request, view, slot):
@@ -30,11 +33,11 @@ class SubMenuGrokker(martian.ClassGrokker):
 
 class ColumnGrokker(martian.ClassGrokker):
     martian.component(Column)
-    martian.directive(directives.context, default=Interface)
-    martian.directive(directives.layer, default=Interface)
-    martian.directive(directives.view, default=ITable)
-    martian.directive(directives.provides, default=IColumn)
-    martian.directive(directives.name, get_default=default_view_name)
+    martian.directive(context, default=Interface)
+    martian.directive(layer, default=Interface)
+    martian.directive(view, default=ITable)
+    martian.directive(provides, default=IColumn)
+    martian.directive(name, get_default=default_view_name)
 
     def execute(self, factory, config, context, request, view, provides, name):
         for_ = (context, request, view)
