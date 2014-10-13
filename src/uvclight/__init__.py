@@ -15,17 +15,12 @@ from zope.event import notify
 from zope.interface import implementer
 from zope.location import Location
 
-# We don't want to directly expose the contextual managers.
-# their names would conflict. They are to be used through the
-# 'context' import.
-from . import context
 
-
-from .session import (
+from ul.browser.session import (
     sessionned,
     )
 
-from .http import (
+from ul.browser.http import (
     setRequest,
     getRequest,
     )
