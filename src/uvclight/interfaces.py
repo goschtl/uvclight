@@ -4,6 +4,7 @@
 
 
 from cromlech.browser import IView
+from uvc.design.canvas.managers import *
 
 
 class IXMLRPCView(IView):

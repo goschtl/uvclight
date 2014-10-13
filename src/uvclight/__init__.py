@@ -118,6 +118,11 @@ from ul.content.events import (
 
 
 # External component exposed
+from cromlech.browser import (
+    slot as viewletmanager,
+    request as layer,
+    )
+
 from dolmen.forms.base import (
     Action,
     FAILURE,
@@ -152,6 +157,10 @@ from grokcore.component import (
     GlobalUtility,
     global_utility,
     MultiAdapter,
+    title,
+    name,
+    provides,
+    adapts,
     )
 
 from cromlech.browser import IPublicationRoot as IRootObject
