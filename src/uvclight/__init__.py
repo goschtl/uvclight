@@ -13,10 +13,6 @@ from .components import (
 
 ### Browser exposition
 
-from ul.browser.session import (
-    sessionned,
-    )
-
 from ul.browser.http import (
     setRequest,
     getRequest,
