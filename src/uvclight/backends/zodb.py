@@ -3,3 +3,4 @@ try:
 except ImportError as exc:
     print exc
     print "ZODB capabilities don't seem to be activated"
+    raise
