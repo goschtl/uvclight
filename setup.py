@@ -54,7 +54,6 @@ zodb_requires = [
 
 sql_requires = [
     'ul.sql',
-    'ul.traject',
     ]
 
 mongo_requires = [
@@ -63,6 +62,7 @@ mongo_requires = [
 
 traject_requires = [
     'traject',
+    'ul.traject',
     ]
 
 websocket_requires = [
