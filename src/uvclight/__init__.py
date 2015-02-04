@@ -10,6 +10,7 @@ from .components import (
     REST,
     )
 
+from .directives import *
 
 ### Browser exposition
 
