@@ -1,0 +1,21 @@
+<select id="#" name="#" class="#"
+        tal:define="value widget.inputValue()"
+        tal:attributes="name widget.identifier;
+                        id widget.htmlId();
+                        class widget.htmlClass() + ' alternative-choice';
+                        widget.htmlAttributes()">
+  <option value="#"
+          tal:repeat="choice widget.choices()"
+          tal:attributes="value choice.token;
+                          selected choice.token == value and 'selected' or None"
+          tal:content="choice.title or choice.value">
+    Option
+  </option>
+</select>
+<span>
+  Sonstiges:
+  <input type="text" id="#" name="#" class="alternative-input"
+	 tal:attributes="name widget.identifier;
+			 id widget.htmlId();
+			 value widget.textValue" />
+</span>

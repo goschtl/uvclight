@@ -113,5 +113,11 @@ setup(
       # -*- Entry points: -*-
       [chameleon.tales]
       provider = dolmen.tales:SlotExpr
+
+      [dolmen.collection.components]
+      optionalchoice = uvclight.widgets:register
+
+      [fanstatic.libraries]
+      uvclight = uvclight.widgets:widget_library
       """,
       )
