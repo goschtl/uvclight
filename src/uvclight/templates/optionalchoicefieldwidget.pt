@@ -1,8 +1,8 @@
 <select id="#" name="#" class="#"
-        tal:define="value widget.inputValue()"
+        tal:define="value widget.selectValue()"
         tal:attributes="name widget.identifier;
                         id widget.htmlId();
-                        class widget.htmlClass() + ' alternative-choice';
+                        class widget.htmlClass() + ' alternative-choice form-control';
                         widget.htmlAttributes()">
   <option value="#"
           tal:repeat="choice widget.choices()"
@@ -14,7 +14,7 @@
 </select>
 <span>
   Sonstiges:
-  <input type="text" id="#" name="#" class="alternative-input"
+  <input type="text" id="#" name="#" class="alternative-input form-control"
 	 tal:attributes="name widget.identifier;
 			 id widget.htmlId();
 			 value widget.textValue" />

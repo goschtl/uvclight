@@ -51,7 +51,6 @@ class OptionalChoiceFieldWidget(choice.ChoiceFieldWidget):
         super(OptionalChoiceFieldWidget, self).update()
         optchoice.need()
 
-    @property
     def selectValue(self):
         value = self.inputValue()
         if isinstance(value, list):
@@ -87,7 +86,11 @@ class OptionalChoiceWidgetExtractor(WidgetExtractor):
 
     def extract(self):
         value, error = super(OptionalChoiceWidgetExtractor, self).extract()
-        value, input = value
+        if value == '':
+            value = NO_VALUE
+            input = None
+        else:
+            value, input = value
         if input:
             return (input, error)
         if value is not NO_VALUE:
