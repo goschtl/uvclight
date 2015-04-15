@@ -47,3 +47,31 @@ class REST(View):
 
     def DELETE(self):
         raise MethodNotAllowed(self.context, self.request)
+
+
+CHUNK = 1 << 18
+
+
+def make_pdf(self, result):
+    response = self.responseFactory()
+    response.headers['Content-Type'] = 'application/pdf'
+    response.headers['Content-Disposition'] = (
+        u'attachment; filename="%s.csv"' % self.view.__class__.__name__
+    )
+
+    def filebody(r):
+        data = r.read(CHUNK)
+        while data:
+            yield data
+            data = r.read(CHUNK)
+
+    response.app_iter = filebody(result)
+    return response
+
+
+class PDF(View):
+    baseclass()
+    make_response = make_pdf
+
+    def render(self):
+        raise NotImplementedError('Return your own file-like object')
