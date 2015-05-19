@@ -15,8 +15,10 @@ class Captcha(ASCIILine):
 
 
 class CaptchaSchemaField(SchemaField):
-    pass
 
+    def validate(self, value, form):
+        return None
+    
 
 @implementer(IOptionalChoice)
 class OptionalChoice(Choice):

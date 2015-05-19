@@ -1,12 +1,13 @@
 # -*- coding: utf-8 -*-
 
-from .fields import SchemaFieldWidget, CaptchaSchemaField, OptionalChoiceField
-from .. import getMultiAdapter
-from ..directives import adapts, name
+from .fields import CaptchaSchemaField, OptionalChoiceField
+from zope.component import getMultiAdapter
+from ..directives import adapts, name, context
 from ..utils import  get_template
 from dolmen.forms.base.markers import NO_VALUE
 from dolmen.forms.base.widgets import WidgetExtractor
 from dolmen.forms.ztk.widgets import choice
+from dolmen.forms.ztk.fields import SchemaFieldWidget
 from fanstatic import Resource, Library
 from js.jquery import jquery
 from zope.interface import Interface
@@ -19,6 +20,8 @@ optchoice = Resource(widget_library, 'choice.js', depends=[jquery])
 class CaptchaFieldWidget(SchemaFieldWidget):
     adapts(CaptchaSchemaField, Interface, Interface)
 
+    template = get_template('captchafieldwidget.cpt', __file__)
+    
     def __init__(self, component, form, request):
         super(CaptchaFieldWidget, self).__init__(component, form, request)
         captcha_view = getMultiAdapter((form.context, request), name='captcha')

@@ -119,6 +119,6 @@ setup(
       uvclight_fields = uvclight.form_components.fields:register
 
       [fanstatic.libraries]
-      uvclight = uvclight.widgets:widget_library
+      uvclight = uvclight.form_components.widgets:widget_library
       """,
       )

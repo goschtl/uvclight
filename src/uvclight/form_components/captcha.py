@@ -8,7 +8,7 @@ import sys
 import time
 
 from dolmen.view import ModelView
-from .. import View, name, adapts, provides, MultiAdapter, getSession
+from .. import View, name, adapts, provides, context, MultiAdapter, getSession
 from skimpyGimpy import skimpyAPI
 from zope.interface import Interface
 from cromlech.browser.interfaces import ITraverser
@@ -49,8 +49,8 @@ class CaptchaSessionHandler(object):
         ssid = session[SESSION_KEY]
         nowish = int((_TEST_TIME or time.time()) / 300)
         seeds = [
-            digest(SECRET, session, nowish),
-            digest(SECRET, session, nowish - 1)]
+            digest(SECRET, ssid, nowish),
+            digest(SECRET, ssid, nowish - 1)]
 
         words = []
         for seed in seeds:
@@ -79,7 +79,7 @@ class CaptchaSessionHandler(object):
         return session_id
 
     @classmethod
-    def verify(session_id):
+    def verify(cls, session_id):
         """Ensure session id and cookie exist
         """
         session = getSession()
@@ -103,10 +103,11 @@ class RenderedCaptcha(ModelView):
     def make_response(self, result):
         response = self.responseFactory()
         CaptchaSessionHandler.verify(self._session_id)
-        response.setHeader('content-type', self.content_type)
-        response.setHeader('cache-control', 'no-cache, no-store')
-        response.setHeader('pragma', 'no-cache')
-        response.setHeader('expires', 'now')
+        response.headers['content_type'] = self.content_type
+        response.headers['cache_control'] = 'no-cache, no-store'
+        response.headers['pragma'] = 'no-cache'
+        response.headers['expires'] = 'now'
+        response.write(result)
         return response
 
 
@@ -131,7 +132,7 @@ class CaptchaView(View):
     _session_id = None
     
     def _url(self, filename):
-        return '%s/++captcha++/%s' % (self.url(self.context), filename)
+        return '%s/++captcha++%s' % (self.url(self.context), filename)
 
     def image_tag(self):
         self._session_id = CaptchaSessionHandler.verify(self._session_id)
@@ -158,8 +159,12 @@ class Captcha(MultiAdapter):
     provides(ITraverser)
 
     _session_id = None
+
+    def __init__(self, obj, request):
+        self.context = obj
+        self.request = request
     
-    def travserse(self, ns, name):
+    def traverse(self, ns, name):
         if name in CAPTCHA_RENDERERS:
             CaptchaSessionHandler.verify(self._session_id)
             return CAPTCHA_RENDERERS[name](
