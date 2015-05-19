@@ -42,6 +42,7 @@ base_requires = [
     'zope.i18n',
     'zope.interface',
     'zope.security',
+    'skimpyGimpy',
     ]
 
 auth_requires = [
@@ -115,7 +116,7 @@ setup(
       provider = dolmen.tales:SlotExpr
 
       [dolmen.collection.components]
-      optionalchoice = uvclight.widgets:register
+      uvclight_fields = uvclight.form_components.fields:register
 
       [fanstatic.libraries]
       uvclight = uvclight.widgets:widget_library

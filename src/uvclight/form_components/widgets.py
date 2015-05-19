@@ -1,46 +1,45 @@
-import datetime
+# -*- coding: utf-8 -*-
 
+from .fields import SchemaFieldWidget, CaptchaSchemaField, OptionalChoiceField
+from .. import getMultiAdapter
+from ..directives import adapts, name
+from ..utils import  get_template
 from dolmen.forms.base.markers import NO_VALUE
 from dolmen.forms.base.widgets import WidgetExtractor
-from dolmen.forms.ztk.fields import registerSchemaField
 from dolmen.forms.ztk.widgets import choice
-from dolmen.forms.ztk.widgets.choice import ChoiceFieldWidget
-from zope.event import notify
-from zope.interface import Interface
-from zope.schema import Choice
-from js.jquery import jquery
 from fanstatic import Resource, Library
-
-from .directives import adapts, implementer, name
-from .utils import  get_template
+from js.jquery import jquery
+from zope.interface import Interface
 
 
 widget_library = Library('uvclight', 'static')
 optchoice = Resource(widget_library, 'choice.js', depends=[jquery])
 
 
-class IOptionalChoice(Interface):
-    pass
+class CaptchaFieldWidget(SchemaFieldWidget):
+    adapts(CaptchaSchemaField, Interface, Interface)
+
+    def __init__(self, component, form, request):
+        super(CaptchaFieldWidget, self).__init__(component, form, request)
+        captcha_view = getMultiAdapter((form.context, request), name='captcha')
+        self.captcha = captcha_view.image_tag()
 
 
-@implementer(IOptionalChoice)
-class OptionalChoice(Choice):
-    """A choice field with the option to add an alternative value
-    """
-    def __init__(self, values=None, vocabulary=None,
-                 source=None, **kw):
-        Choice.__init__(self, values, vocabulary, source, **kw)
+class CaptchaWidgetExtractor(WidgetExtractor):
+    adapts(CaptchaSchemaField, Interface, Interface)
 
-    def _validate(self, value):
-        if self._init_field:
-            return
-        return
-
-
-class OptionalChoiceField(choice.ChoiceField):
-
-    def validate(self, value, form):
-        return None
+    def extract(self):
+        value, errors = super(CaptchaWidgetExtractor, self).extract()
+        if errors:
+            return (None, errors)
+        if value is not NO_VALUE:
+            value = str(value)
+            captcha = getMultiAdapter(
+                (self.form.context, self.request), name='captcha')
+            if not captcha.verify(value):
+                return (None, u"Invalid captcha input.")
+            return (value, None)
+        return (value, None)
 
 
 class OptionalChoiceFieldWidget(choice.ChoiceFieldWidget):
@@ -100,21 +99,3 @@ class OptionalChoiceWidgetExtractor(WidgetExtractor):
             except LookupError:
                 return (None, u'Invalid value')
         return (value, error)
-
-
-def OptionalChoiceSchemaFactory(schema):
-    field = OptionalChoiceField(
-        schema.title or None,
-        identifier=schema.__name__,
-        description=schema.description,
-        required=schema.required,
-        readonly=schema.readonly,
-        source=schema.vocabulary,
-        vocabularyName=schema.vocabularyName,
-        interface=schema.interface,
-        defaultValue=schema.default or NO_VALUE)
-    return field
-
-
-def register():
-    registerSchemaField(OptionalChoiceSchemaFactory, IOptionalChoice)
