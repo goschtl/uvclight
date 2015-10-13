@@ -31,7 +31,6 @@
 
   <include package="." file="meta.zcml" />
 
-  <grok:grok package=".managers" />
   <grok:grok package=".form_components" />
   <grok:grok package="ul.auth" zcml:condition="installed ul.auth" />
   <grok:grok package="ul.browser" zcml:condition="installed ul.browser" />
