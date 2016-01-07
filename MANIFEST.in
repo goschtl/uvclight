@@ -1,2 +1,3 @@
+recursive-include *.cfg
 recursive-include src *.py *.zcml *.po *.cpt *.pt *.bdf
-recursive-include docs *.txt
+recursive-include docs *
