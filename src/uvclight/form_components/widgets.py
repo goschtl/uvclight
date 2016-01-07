@@ -100,5 +100,5 @@ class OptionalChoiceWidgetExtractor(WidgetExtractor):
             try:
                 value = choices.getTermByToken(value).value
             except LookupError:
-                return (None, u'Invalid value')
+                return (None, u'Bitte geben Sie hier einen gültigen Wert ein.')
         return (value, error)
