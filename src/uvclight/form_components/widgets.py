@@ -40,7 +40,7 @@ class CaptchaWidgetExtractor(WidgetExtractor):
             captcha = getMultiAdapter(
                 (self.form.context, self.request), name='captcha')
             if not captcha.verify(value):
-                return (None, u"Invalid captcha input.")
+                return (None, u"Der eingegebene Sicherheitscode ist falsch.")
             return (value, None)
         return (value, None)
 
