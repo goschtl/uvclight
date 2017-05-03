@@ -1,20 +1,30 @@
 # -*- coding: utf-8 -*-
 
-from .fields import CaptchaSchemaField, OptionalChoiceField
-from zope.component import getMultiAdapter
-from ..directives import adapts, name, context
-from ..utils import  get_template
+import os
+from grokcore.component import global_adapter, adapts, name
 from dolmen.forms.base.markers import NO_VALUE
 from dolmen.forms.base.widgets import WidgetExtractor
 from dolmen.forms.ztk.widgets import choice
-from dolmen.forms.ztk.fields import SchemaFieldWidget
 from fanstatic import Resource, Library
 from js.jquery import jquery
+from zope.component import getMultiAdapter
 from zope.interface import Interface
+from dolmen.forms.ztk.widgets.choice import ChoiceSchemaField
+from dolmen.forms.ztk.interfaces import ICollectionField
+from dolmen.forms.base.interfaces import IWidget
+from dolmen.forms.ztk.fields import SchemaField, SchemaFieldWidget
+from dolmen.forms.ztk.widgets.collection import (
+    CollectionSchemaField, newCollectionWidgetFactory, MultiChoiceFieldWidget)
+
+from ..directives import adapts, name, context
+from ..utils import get_template
+from .fields import CaptchaSchemaField, OptionalChoiceField
 
 
 widget_library = Library('uvclight', 'static')
 optchoice = Resource(widget_library, 'choice.js', depends=[jquery])
+multiselectjs = Resource(widget_library, 'multiselect/js/jquery.multi-select.js', depends=[jquery])
+multiselect = Resource(widget_library, 'multiselect/css/multi-select.css', depends=[multiselectjs])
 
 
 class CaptchaFieldWidget(SchemaFieldWidget):
@@ -102,3 +112,24 @@ class OptionalChoiceWidgetExtractor(WidgetExtractor):
             except LookupError:
                 return (None, u'Bitte geben Sie hier einen gültigen Wert ein.')
         return (value, error)
+
+
+class InOutWidget(MultiChoiceFieldWidget, SchemaFieldWidget):
+    adapts(CollectionSchemaField, ChoiceSchemaField, Interface, Interface)
+    name('INOUT')
+
+    template = get_template('inout.pt', __file__)
+
+    def htmlClass(self):
+        return 'field-list field-inout'
+
+    def __init__(self, field, value_field, form, request):
+        super(InOutWidget, self).__init__(field, value_field, form, request)
+        multiselect.need()
+
+
+global_adapter(
+    newCollectionWidgetFactory(mode='INOUT'),
+    adapts=(ICollectionField, Interface, Interface),
+    provides=IWidget,
+    name='INOUT')
