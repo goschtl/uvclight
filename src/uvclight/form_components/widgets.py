@@ -18,7 +18,7 @@ from dolmen.forms.ztk.widgets.collection import (
 
 from ..directives import adapts, name, context
 from ..utils import get_template
-from .fields import CaptchaSchemaField, OptionalChoiceField
+from .fields import CaptchaSchemaField, OptionalChoiceField, OrderedChoicesField
 
 
 widget_library = Library('uvclight', 'static')
@@ -115,8 +115,7 @@ class OptionalChoiceWidgetExtractor(WidgetExtractor):
 
 
 class InOutWidget(MultiChoiceFieldWidget, SchemaFieldWidget):
-    adapts(CollectionSchemaField, ChoiceSchemaField, Interface, Interface)
-    name('INOUT')
+    adapts(OrderedChoicesField, ChoiceSchemaField, Interface, Interface)
 
     template = get_template('inout.pt', __file__)
 
@@ -128,8 +127,25 @@ class InOutWidget(MultiChoiceFieldWidget, SchemaFieldWidget):
         multiselect.need()
 
 
-global_adapter(
-    newCollectionWidgetFactory(mode='INOUT'),
-    adapts=(ICollectionField, Interface, Interface),
-    provides=IWidget,
-    name='INOUT')
+class OrderedChoicesWidgetExtractor(WidgetExtractor):
+    adapts(OrderedChoicesField, ChoiceSchemaField, Interface, Interface)
+
+    def __init__(self, field, value_field, form, request):
+        super(OrderedChoicesWidgetExtractor, self).__init__(
+            field, form, request)
+        self.source = value_field
+
+    def extract(self):
+        value = self.request.form.get(self.identifier, NO_VALUE)
+        if value is NO_VALUE:
+            return (self.component.collectionType(), None)
+        choices = self.source.getChoices(self.form)
+        try:
+            if not isinstance(value, list):
+                value = [value]
+            value = self.component.collectionType(
+                [choices.getTermByToken(t).value for t in value])
+        except LookupError:
+            return (None, _(u'The selected value is not available.'))
+
+        return (value, None)

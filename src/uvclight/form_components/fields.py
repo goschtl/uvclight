@@ -1,12 +1,18 @@
 # -*- coding: utf-8 -*-
 
-from .interfaces import ICaptcha, IOptionalChoice
+from .interfaces import ICaptcha, IOptionalChoice, IOrderedChoices
 from dolmen.forms.base.markers import NO_VALUE
 from dolmen.forms.ztk.fields import SchemaField
 from dolmen.forms.ztk.fields import registerSchemaField
 from dolmen.forms.ztk.widgets import choice
 from zope.interface import implementer
-from zope.schema import ASCIILine, Choice
+from zope.schema import ASCIILine, Choice, List
+from dolmen.forms.ztk.widgets.collection import CollectionSchemaField, makeCollectionSchemaFactory
+
+
+@implementer(IOrderedChoices)
+class OrderedChoices(List):
+    pass
 
 
 @implementer(ICaptcha)
@@ -18,6 +24,10 @@ class CaptchaSchemaField(SchemaField):
 
     def validate(self, value, form):
         return None
+
+
+class OrderedChoicesField(CollectionSchemaField):
+    pass
     
 
 @implementer(IOptionalChoice)
@@ -52,8 +62,9 @@ def OptionalChoiceSchemaFactory(schema):
         interface=schema.interface,
         defaultValue=schema.default or NO_VALUE)
     return field
-    
+
 
 def register():
     registerSchemaField(OptionalChoiceSchemaFactory, IOptionalChoice)
     registerSchemaField(CaptchaSchemaField, ICaptcha)
+    registerSchemaField(makeCollectionSchemaFactory(OrderedChoicesField), IOrderedChoices)

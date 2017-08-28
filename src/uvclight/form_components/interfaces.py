@@ -11,3 +11,7 @@ class ICaptcha(IASCIILine):
 
 class IOptionalChoice(Interface):
     pass
+
+
+class IOrderedChoices(Interface):
+    pass

@@ -1,6 +1,11 @@
 <script type="text/javascript">
   $(document).ready(function() {
-      $('<tal:id replace="'#' + widget.htmlId()" />').multiSelect({keepOrder: true, sortable: true});
+      $('<tal:id replace="'#' + widget.htmlId()" />').multiSelect({
+          keepOrder: true,
+	  sortable: true,
+          selectableHeader: "<div class='custom-header'>Selectable</div>",
+          selectionHeader: "<div class='custom-header'>Selected</div>"
+      });
   });
 </script>
 <tal:widget>
