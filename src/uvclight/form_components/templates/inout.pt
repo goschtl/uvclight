@@ -3,8 +3,8 @@
       $('<tal:id replace="'#' + widget.htmlId()" />').multiSelect({
           keepOrder: true,
 	  sortable: true,
-          selectableHeader: "<div class='custom-header'>Selectable</div>",
-          selectionHeader: "<div class='custom-header'>Selected</div>"
+    selectableHeader: "<div class='custom-header'>&nbsp; nicht benötigt</div>",
+          selectionHeader: "<div class='custom-header'>&nbsp; festgelegt</div>"
       });
   });
 </script>
