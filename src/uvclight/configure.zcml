@@ -14,7 +14,6 @@
 
   <include package="dolmen.request" />
   <include package="dolmen.content" zcml:condition="installed ZODB3" />
-  <include package="dolmen.message" />
   <include package="dolmen.forms.base" />
   <include package="dolmen.forms.ztk"  />
   <include package="dolmen.forms.viewlet"  />
